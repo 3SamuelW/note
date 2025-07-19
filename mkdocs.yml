@@ -1,5 +1,5 @@
 site_name: 我的笔记站点
-site_url: https://note-samuelw.github.io/
+site_url: https://3samuelw.github.io/note/
 site_author: Samuel Wang
 site_description: "这是我的个人笔记与文档网站"
 
@@ -30,5 +30,5 @@ plugins:
   - git-revision-date-localized:
       fallback_to_build_date: true
 
-repo_url: https://github.com/note-samuelw/note-samuelw.github.io
+repo_url: https://github.com/3SamuelW/note
 edit_uri: edit/main/docs/
