@@ -1,0 +1,11 @@
+name: mkdocs-env
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+    - mkdocs
+    - mkdocs-material
+    - mkdocs-git-revision-date-localized-plugin
