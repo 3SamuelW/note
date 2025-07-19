@@ -1,0 +1,29 @@
+/* 隐藏公式溢出滚动条 */
+.md-typeset div.arithmatex {
+  overflow-y: hidden;
+}
+
+/* 按钮样式 */
+.button1 {
+  color: white;
+  padding: 1px 4px;
+  font-size: 15px;
+  margin: 0 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* 并排布局示例 */
+.grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 6px;
+}
+
+/* 自定义美化样式，可自由扩展 */
+h1 {
+  color: #3f51b5;
+  border-bottom: 2px solid #3f51b5;
+  padding-bottom: 0.3em;
+}
