@@ -29,6 +29,7 @@ plugins:
   - search
   - git-revision-date-localized:
       fallback_to_build_date: true
+use_directory_urls: true
 
 repo_url: https://github.com/3SamuelW/note
 edit_uri: edit/main/docs/
