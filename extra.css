@@ -27,3 +27,92 @@ h1 {
   border-bottom: 2px solid #3f51b5;
   padding-bottom: 0.3em;
 }
+
+/* 现有样式保持不变 */
+
+/* 首页卡片样式 */
+.home-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.home-card {
+  background: var(--md-default-bg-color);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: transform 0.2s ease;
+}
+
+.home-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* 首页卡片链接样式 */
+.home-card h3 a {
+  color: var(--md-primary-fg-color);
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.home-card h3 a:hover {
+  color: var(--md-accent-fg-color);
+  text-decoration: underline;
+}
+
+.home-card ul li a {
+  color: var(--md-default-fg-color--light);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.home-card ul li a:hover {
+  color: var(--md-primary-fg-color);
+  text-decoration: underline;
+}
+
+/* 增强整个卡片的可点击感 */
+.home-card {
+  cursor: pointer;
+  position: relative;
+}
+
+.home-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 90%, var(--md-primary-fg-color--lightest) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.home-card:hover::before {
+  opacity: 1;
+}
+
+/* 代码块增强 */
+.highlight {
+  border-radius: 6px;
+}
+
+/* 导航图标间距 */
+.md-nav__item .md-nav__link {
+  display: flex;
+  align-items: center;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .home-cards {
+    grid-template-columns: 1fr;
+  }
+}

@@ -12,22 +12,28 @@
         <meta name="author" content="Samuel Wang">
       
       
+        <link rel="canonical" href="https://3samuelw.github.io/note/programming/web-development/">
       
       
+        <link rel="prev" href="../python/projects/">
       
-      <link rel="icon" href="/note/assets/images/favicon.png">
+      
+        <link rel="next" href="html-css/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
     
     
       
-        <title>Samuel's 学习笔记</title>
+        <title>Web开发 🌐 - Samuel's 学习笔记</title>
       
     
     
-      <link rel="stylesheet" href="/note/assets/stylesheets/main.342714a4.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
       
         
-        <link rel="stylesheet" href="/note/assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -46,9 +52,9 @@
       
     
     
-      <link rel="stylesheet" href="/note/extra.css">
+      <link rel="stylesheet" href="../../extra.css">
     
-    <script>__md_scope=new URL("/note/",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -73,6 +79,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#web" class="md-skip">
+          跳转至
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -85,7 +96,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="页眉">
-    <a href="/note/." title="Samuel&#39;s 学习笔记" class="md-header__button md-logo" aria-label="Samuel's 学习笔记" data-md-component="logo">
+    <a href="../.." title="Samuel&#39;s 学习笔记" class="md-header__button md-logo" aria-label="Samuel's 学习笔记" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -105,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              
+              Web开发 🌐
             
           </span>
         </div>
@@ -221,7 +232,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="/note/." title="Samuel&#39;s 学习笔记" class="md-nav__button md-logo" aria-label="Samuel's 学习笔记" data-md-component="logo">
+    <a href="../.." title="Samuel&#39;s 学习笔记" class="md-nav__button md-logo" aria-label="Samuel's 学习笔记" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -251,7 +262,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -270,8 +281,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -282,13 +295,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
@@ -304,7 +315,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             👨‍💻 编程学习
@@ -318,7 +329,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/programming/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   
@@ -383,7 +394,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/programming/python/" class="md-nav__link">
+      <a href="../python/" class="md-nav__link">
         
   
   
@@ -406,7 +417,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/programming/python/basics/" class="md-nav__link">
+      <a href="../python/basics/" class="md-nav__link">
         
   
   
@@ -429,7 +440,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/programming/python/advanced/" class="md-nav__link">
+      <a href="../python/advanced/" class="md-nav__link">
         
   
   
@@ -452,7 +463,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/programming/python/projects/" class="md-nav__link">
+      <a href="../python/projects/" class="md-nav__link">
         
   
   
@@ -480,6 +491,8 @@
                 
   
   
+    
+  
   
   
     
@@ -489,13 +502,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" checked>
         
           
           <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
@@ -511,7 +522,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2_3">
             <span class="md-nav__icon md-icon"></span>
             🌐 Web开发
@@ -522,10 +533,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="/note/programming/web-development/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Web开发 🌐
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -536,6 +569,236 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 学习目标
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      🛣️ 学习路径
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      📚 技术栈概览
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 技术栈概览">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      🏗️ 基础技术
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎨 进阶技能
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚀 现代框架
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 学习进度
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      🛠️ 开发工具
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛠️ 开发工具">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      编辑器推荐
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      必备插件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      浏览器工具
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎨 设计原则
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎨 设计原则">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ux" class="md-nav__link">
+    <span class="md-ellipsis">
+      用户体验 (UX)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      响应式设计
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      💼 实战项目
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💼 实战项目">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      基础项目
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      进阶项目
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      🌟 学习资源
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🌟 学习资源">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      官方文档
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      在线教程
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -548,7 +811,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/programming/web-development/html-css/" class="md-nav__link">
+      <a href="html-css/" class="md-nav__link">
         
   
   
@@ -571,7 +834,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/programming/web-development/javascript/" class="md-nav__link">
+      <a href="javascript/" class="md-nav__link">
         
   
   
@@ -594,7 +857,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/programming/web-development/frameworks/" class="md-nav__link">
+      <a href="frameworks/" class="md-nav__link">
         
   
   
@@ -667,7 +930,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/programming/algorithms/" class="md-nav__link">
+      <a href="../algorithms/" class="md-nav__link">
         
   
   
@@ -690,7 +953,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/programming/algorithms/data-structures/" class="md-nav__link">
+      <a href="../algorithms/data-structures/" class="md-nav__link">
         
   
   
@@ -713,7 +976,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/programming/algorithms/algorithm-notes/" class="md-nav__link">
+      <a href="../algorithms/algorithm-notes/" class="md-nav__link">
         
   
   
@@ -796,7 +1059,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/projects/" class="md-nav__link">
+      <a href="../../projects/" class="md-nav__link">
         
   
   
@@ -819,7 +1082,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/projects/project-a/" class="md-nav__link">
+      <a href="../../projects/project-a/" class="md-nav__link">
         
   
   
@@ -842,7 +1105,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/projects/project-b/" class="md-nav__link">
+      <a href="../../projects/project-b/" class="md-nav__link">
         
   
   
@@ -917,7 +1180,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/tools/" class="md-nav__link">
+      <a href="../../tools/" class="md-nav__link">
         
   
   
@@ -940,7 +1203,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/tools/development-tools/" class="md-nav__link">
+      <a href="../../tools/development-tools/" class="md-nav__link">
         
   
   
@@ -963,7 +1226,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/tools/useful-resources/" class="md-nav__link">
+      <a href="../../tools/useful-resources/" class="md-nav__link">
         
   
   
@@ -986,7 +1249,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/tools/tutorials/" class="md-nav__link">
+      <a href="../../tools/tutorials/" class="md-nav__link">
         
   
   
@@ -1061,7 +1324,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/blog/" class="md-nav__link">
+      <a href="../../blog/" class="md-nav__link">
         
   
   
@@ -1084,7 +1347,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/blog/2025/learning-journey/" class="md-nav__link">
+      <a href="../../blog/2025/learning-journey/" class="md-nav__link">
         
   
   
@@ -1107,7 +1370,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/blog/tech-thoughts/" class="md-nav__link">
+      <a href="../../blog/tech-thoughts/" class="md-nav__link">
         
   
   
@@ -1137,7 +1400,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/note/about/" class="md-nav__link">
+      <a href="../../about/" class="md-nav__link">
         
   
   
@@ -1169,6 +1432,226 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 学习目标
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      🛣️ 学习路径
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      📚 技术栈概览
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 技术栈概览">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      🏗️ 基础技术
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎨 进阶技能
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚀 现代框架
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 学习进度
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      🛠️ 开发工具
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛠️ 开发工具">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      编辑器推荐
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      必备插件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      浏览器工具
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎨 设计原则
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎨 设计原则">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ux" class="md-nav__link">
+    <span class="md-ellipsis">
+      用户体验 (UX)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      响应式设计
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      💼 实战项目
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💼 实战项目">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      基础项目
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      进阶项目
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      🌟 学习资源
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🌟 学习资源">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      官方文档
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      在线教程
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -1180,8 +1663,174 @@
             <div class="md-content" data-md-component="content">
               <article class="md-content__inner md-typeset">
                 
-  <h1>404 - Not found</h1>
+                  
 
+
+  
+  
+
+
+<h1 id="web">Web开发 🌐</h1>
+<p>学习现代Web开发技术，从基础的HTML/CSS到JavaScript动态编程，再到流行的前端框架。</p>
+<h2 id="_1">🎯 学习目标</h2>
+<ul>
+<li>掌握Web开发的基础技术栈</li>
+<li>理解前端开发的核心概念</li>
+<li>学会创建响应式网页</li>
+<li>了解现代前端开发工作流程</li>
+</ul>
+<h2 id="_2">🛣️ 学习路径</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>graph TD
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    A[HTML基础] --&gt; B[CSS样式]
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    B --&gt; C[JavaScript编程]
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    C --&gt; D[DOM操作]
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    D --&gt; E[前端框架]
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    E --&gt; F[项目实战]
+</code></pre></div>
+<h2 id="_3">📚 技术栈概览</h2>
+<h3 id="_4">🏗️ 基础技术</h3>
+<ul>
+<li><strong>HTML5</strong> - 网页结构和语义</li>
+<li><strong>CSS3</strong> - 样式设计和布局</li>
+<li><strong>JavaScript</strong> - 动态交互和逻辑</li>
+</ul>
+<h3 id="_5">🎨 进阶技能</h3>
+<ul>
+<li><strong>响应式设计</strong> - 移动端适配</li>
+<li><strong>CSS预处理器</strong> - Sass/Less</li>
+<li><strong>构建工具</strong> - Webpack/Vite</li>
+</ul>
+<h3 id="_6">🚀 现代框架</h3>
+<ul>
+<li><strong>React</strong> - 组件化开发</li>
+<li><strong>Vue.js</strong> - 渐进式框架</li>
+<li><strong>Angular</strong> - 企业级应用</li>
+</ul>
+<h2 id="_7">📊 学习进度</h2>
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>状态</th>
+<th>重要性</th>
+<th>难度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HTML/CSS</td>
+<td>学习中</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐</td>
+</tr>
+<tr>
+<td>JavaScript</td>
+<td>计划中</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td>前端框架</td>
+<td>规划中</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_8">🛠️ 开发工具</h2>
+<h3 id="_9">编辑器推荐</h3>
+<ul>
+<li><strong>VS Code</strong> - 丰富的插件生态</li>
+<li><strong>WebStorm</strong> - 强大的IDE功能</li>
+</ul>
+<h3 id="_10">必备插件</h3>
+<ul>
+<li>Live Server - 实时预览</li>
+<li>Prettier - 代码格式化</li>
+<li>Auto Rename Tag - 标签重命名</li>
+<li>CSS Peek - CSS定义跳转</li>
+</ul>
+<h3 id="_11">浏览器工具</h3>
+<ul>
+<li>Chrome DevTools - 调试利器</li>
+<li>Firefox Developer Tools - 布局调试</li>
+</ul>
+<h2 id="_12">🎨 设计原则</h2>
+<h3 id="ux">用户体验 (UX)</h3>
+<ul>
+<li>直观的导航设计</li>
+<li>快速的加载速度</li>
+<li>良好的可访问性</li>
+<li>一致的交互体验</li>
+</ul>
+<h3 id="_13">响应式设计</h3>
+<ul>
+<li>移动优先策略</li>
+<li>弹性网格布局</li>
+<li>媒体查询优化</li>
+<li>图片自适应</li>
+</ul>
+<h2 id="_14">💼 实战项目</h2>
+<h3 id="_15">基础项目</h3>
+<ul>
+<li>个人作品集网站</li>
+<li>响应式导航栏</li>
+<li>图片画廊展示</li>
+</ul>
+<h3 id="_16">进阶项目</h3>
+<ul>
+<li>单页应用 (SPA)</li>
+<li>任务管理应用</li>
+<li>天气查询应用</li>
+</ul>
+<h2 id="_17">🌟 学习资源</h2>
+<h3 id="_18">官方文档</h3>
+<ul>
+<li><a href="https://developer.mozilla.org/">MDN Web Docs</a> - 权威参考</li>
+<li><a href="https://www.w3.org/">W3C Standards</a> - Web标准</li>
+</ul>
+<h3 id="_19">在线教程</h3>
+<ul>
+<li>freeCodeCamp - 免费编程课程</li>
+<li>Codecademy - 交互式学习</li>
+<li>The Odin Project - 全栈路径</li>
+</ul>
+<hr />
+<p><em>Web开发是一个不断evolving的领域，保持学习热情很重要！</em></p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="最后更新">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="2025年7月22日 09:42:56 UTC">2025年7月22日</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
               </article>
             </div>
           
@@ -1225,12 +1874,12 @@
     
     
       
-      <script id="__config" type="application/json">{"base": "/note/", "features": ["navigation.instant", "navigation.top", "navigation.sections", "navigation.expand", "content.code.copy", "content.tabs.link", "toc.follow"], "search": "/note/assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.top", "navigation.sections", "navigation.expand", "content.code.copy", "content.tabs.link", "toc.follow"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
     
     
-      <script src="/note/assets/javascripts/bundle.56ea9cef.min.js"></script>
+      <script src="../../assets/javascripts/bundle.56ea9cef.min.js"></script>
       
-        <script src="/note/extra.js"></script>
+        <script src="../../extra.js"></script>
       
     
   </body>
