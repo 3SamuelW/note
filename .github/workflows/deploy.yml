@@ -5,10 +5,16 @@ on:
     branches:
       - main
 
+# 添加权限配置
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
