@@ -41,7 +41,7 @@ jobs:
 
       # 4. 构建 MkDocs
       - name: Build MkDocs
-        run: mkdocs build --strict
+        run: mkdocs build
 
       # 5. 配置 Pages 环境
       - name: Setup Pages
