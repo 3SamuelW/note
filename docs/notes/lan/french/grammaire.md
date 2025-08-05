@@ -1,23 +1,5 @@
 # La grammaire des temps en français
 
-## (0) 目录
-[ I Présent ](#i-présent)   
-[ II Futur proche ](#ii-futur-proche)   
-[ III Passé immédiat ](#iii-passé-immédiat)   
-[ IV Impératif ](#iv-impératif)   
-[ V Passé composé ](#v-passé-composé)   
-[ VI Imparfait ](#vi-l’imparfait)   
-[ VII Futur simple ](#vii-le-futur-simple)   
-[ VIII Futur antérieur ](#viii-futur-antérieur)   
-[ IX Plus-que-parfait ](#ix-plus-que-parfait)   
-[ X Futur dans le passé ](#x-futur-dans-le-passé)   
-[ XI Futur proche dans le passé ](#xi-futur-proche-dans-le-passé)   
-[ XII Passé récent dans le passé ](#xii-passé-récent-dans-le-passé)   
-[ XIII Conditionnel présent ](#xiii-conditionnel-présent)   
-[ XIV Conditionnel passé ](#xiv-conditionnel-passé)   
-[ XV Subjonctif présent ](#xv-subjonctif-présent)
-
-<a name="present"></a>
 ## (I) Présent
 
 |  | je | tu | il | nous | vous | ils |
