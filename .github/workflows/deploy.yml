@@ -5,13 +5,13 @@ on:
     branches:
       - main
 
-# 设置权限
+# 设置权限，允许 Actions 推送 Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# 只允许一个并发部署，跳过正在进行的运行和最新排队的运行之间的运行
+# 只允许一个并发部署
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -20,39 +20,47 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # 1. Checkout 代码并拉取完整历史、LFS 对象
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # 完整历史
+          lfs: true       # 同步 LFS 对象
 
+      # 2. 安装 Python
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
+      # 3. 安装依赖 (mkdocs、主题、插件、ghp-import 等)
       - name: Install dependencies
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
 
+      # 4. 构建 MkDocs
       - name: Build MkDocs
-        run: mkdocs build
+        run: mkdocs build --strict
 
+      # 5. 配置 Pages 环境
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
+      # 6. 上传 site 目录到 Pages 工件
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./site
 
   deploy:
+    needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
     steps:
+      # 7. 发布到 GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
