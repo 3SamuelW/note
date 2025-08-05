@@ -37,6 +37,18 @@ extra_javascript:
 
 nav:
   - 🏠 首页: index.md
+  - 📝 课程笔记: 
+    - notes/index.md
+    - 🎓 BME课程: 
+      - notes/bme/index.md
+      - 工程生理学: 
+        - notes/bme/engineering-physiology/index.md
+        - 课程笔记: notes/bme/engineering-physiology/notes.pdf
+        - 课程习题: notes/bme/engineering-physiology/exercise.pdf
+        - 课程教材: notes/bme/engineering-physiology/textbook.pdf
+        - 教材配套习题: notes/bme/engineering-physiology/textbook-e.pdf
+        - 考试复习习题背诵版: notes/bme/engineering-physiology/exercise-e.pdf
+
   - 👨‍💻 编程学习:
     - programming/index.md
     - 🐍 Python:
