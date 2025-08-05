@@ -1,9 +1,27 @@
+# Python cache
 __pycache__/
 *.py[cod]
+
+# macOS
 *.DS_Store
+
+# Vim swap
 *.swp
-env/
-venv/
+
+# Virtual environments
+/env/
+/venv/
+
+# MyPy cache
 .mypy_cache/
-build/
-site/
+
+# Build outputs
+/build/
+/site/
+
+# Local maintenance guide
+/更新指南.md
+
+# Optional: IDE settings
+.vscode/
+/.idea/

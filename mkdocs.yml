@@ -1,20 +1,34 @@
-site_name: 我的笔记站点
+site_name: Samuel's 学习笔记
 site_url: https://3samuelw.github.io/note/
 site_author: Samuel Wang
-site_description: "这是我的个人笔记与文档网站"
+site_description: "记录我的编程学习之路和项目经验"
 
 theme:
   name: material
   language: zh
   palette:
-    scheme: default
-    primary: indigo
-    accent: indigo
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: 切换到深色模式
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: 切换到浅色模式
   features:
     - navigation.instant
     - navigation.top
+    - navigation.sections
+    - navigation.expand
     - content.code.copy
     - content.tabs.link
+    - toc.follow
+  icon:
+    repo: fontawesome/brands/github
 
 extra_css:
   - extra.css
@@ -22,14 +36,68 @@ extra_javascript:
   - extra.js
 
 nav:
-  - 首页: index.md
-  - 其他页面: other-page.md
+  - 🏠 首页: index.md
+  - 📝 课程笔记: 
+    - notes/index.md
+    - 🎓 BME课程: 
+      - notes/bme/index.md
+      - 工程生理学: 
+        - notes/bme/engineering-physiology/index.md
+        - 课程笔记: notes/bme/engineering-physiology/notes.pdf
+        - 课程习题: notes/bme/engineering-physiology/exercise.pdf
+        - 课程教材: notes/bme/engineering-physiology/textbook.pdf
+        - 教材配套习题: notes/bme/engineering-physiology/textbook-e.pdf
+        - 考试复习习题背诵版: notes/bme/engineering-physiology/exercise-e.pdf
+
+  - 👨‍💻 编程学习:
+    - programming/index.md
+    - 🐍 Python:
+      - programming/python/index.md
+      - Python基础: programming/python/basics.md
+      - Python进阶: programming/python/advanced.md
+      - Python项目: programming/python/projects.md
+    - 🌐 Web开发:
+      - programming/web-development/index.md
+      - HTML/CSS: programming/web-development/html-css.md
+      - JavaScript: programming/web-development/javascript.md
+      - 框架学习: programming/web-development/frameworks.md
+    - 📊 算法与数据结构:
+      - programming/algorithms/index.md
+      - 数据结构: programming/algorithms/data-structures.md
+      - 算法笔记: programming/algorithms/algorithm-notes.md
+  - 🚀 项目展示:
+    - projects/index.md
+    - 项目A: projects/project-a.md
+    - 项目B: projects/project-b.md
+  - 🛠️ 工具资源:
+    - tools/index.md
+    - 开发工具: tools/development-tools.md
+    - 有用资源: tools/useful-resources.md
+    - 教程收集: tools/tutorials.md
+  - 📝 博客:
+    - blog/index.md
+    - 学习历程: blog/2025/learning-journey.md
+    - 技术思考: blog/tech-thoughts.md
+  - 👤 关于我: about.md
 
 plugins:
   - search
   - git-revision-date-localized:
       fallback_to_build_date: true
-use_directory_urls: true
+      locale: zh
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - admonition
+  - pymdownx.details
 
 repo_url: https://github.com/3SamuelW/note
 edit_uri: edit/main/docs/
