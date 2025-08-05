@@ -1,8 +1,8 @@
 # Bienvenue!
 
-## Welcome to my page! 👋
+## Welcome to my pages! 👋
 
-你好！我是 Samuel Wang，ZJU BME/CS 在读本科学生，希望在这里与你分享我的学习生活。
+你好！我是 Samuel，ZJU BME/CS 在读本科学生，希望在这里与你分享我的学习生活。
 
 ## 🎯 网站导航
 
