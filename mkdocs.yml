@@ -39,8 +39,7 @@ nav:
   - 🏠 首页: index.md
   - 📝 课程笔记: 
     - notes/index.md
-    - 🎓 BME课程: 
-      - notes/bme/index.md
+    - BME课程 🎓: 
       - 工程生理学: 
         - notes/bme/engineering-physiology/index.md
         - 课程笔记: notes/bme/engineering-physiology/notes.pdf

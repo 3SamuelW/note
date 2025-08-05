@@ -2,80 +2,19 @@
 
 ## 🙋‍♂️ 个人介绍
 
-你好！我是 Samuel，一名对编程充满热情的学习者。我相信通过持续学习和实践，可以不断提升自己的技术能力和解决问题的思维方式。
+Hi there! I'm **Samuel**, an undergraduate student majoring in **Biomedical Engineering** with a minor in **Computer Science**. Welcome to my corner of the web! 
 
-## 📈 学习历程
+Beyond tech, I'm passionate about languages – I speak **Chinese** (native), **English**, and some **French**, while currently learning Dutch and Arabic. 
 
-### 🎯 当前状态
-
-- 正在系统学习编程基础知识
-- 通过实际项目加深理解
-- 积极参与开源社区
-
-### 🚀 学习方式
-
-- 理论与实践相结合
-- 记录学习笔记和心得
-- 分享知识，教学相长
-
-## 💻 技能概览
-
-### 正在学习
-
-- 🐍 
-
-  Python 编程
-
-  - 基础语法和核心概念
-  - 面向对象编程
-  - 常用库和框架
-
-- 🌐 
-
-  Web 开发
-
-  - HTML5 & CSS3
-  - JavaScript ES6+
-  - 前端框架学习
-
-- 📊 
-
-  数据结构与算法
-
-  - 基础数据结构
-  - 常用算法
-  - 解题思路训练
-
-### 兴趣领域
-
-- 💻 软件开发
-- 🔓 开源项目
-- ✍️ 技术写作
-- 🤖 人工智能 (未来规划)
-
-## 🛠️ 工具与环境
-
-### 开发工具
-
-- **编辑器**: VS Code
-- **版本控制**: Git & GitHub
-- **环境管理**: Anaconda
-- **文档工具**: MkDocs
-
-### 学习资源
-
-- 📚 在线教程和书籍
-- 🎥 视频课程
-- 💡 实践项目
-- 👥 技术社区
+Having learned so much from others' shared notes and resources, I'm excited to give back to the **open-source community** by sharing my own learning journey. I hope you find something useful here! If you encounter any issues, please let me know.
 
 ## 📫 联系方式
 
 - 🐙 **GitHub**: [3SamuelW](https://github.com/3SamuelW)
-- 📧 **Email**: [你的邮箱地址]
+- 📧 **Email**: [3smauelw@gmail.com]([3samuelw@gmail.com](mailto:3samuelw@gmail.com))
 - 🌐 **网站**: https://3samuelw.github.io/note/
 
-## 🎨 关于这个网站
+## 📈 关于这个网站
 
 ### 技术栈
 
@@ -98,43 +37,10 @@
 
 创建这个网站的目的是：
 
-1. **记录学习过程** - 将学习笔记系统化整理
-2. **分享知识经验** - 帮助其他学习者避免踩坑
-3. **展示学习成果** - 记录成长轨迹和项目经历
-4. **建立个人品牌** - 在技术社区中建立存在感
+1. **记录学习过程** - **push**一下自己学习！
+2. **分享课程经验** - 希望我的开源可以帮到你！
+3. **共享学习资源** - 存档一些课程资料！
 
-## 🎯 未来规划
+## 💭 千里之行，始于足下
 
-### 短期目标 (3-6个月)
-
-- [ ] 完善Python学习笔记系列
-- [ ] 完成第一个Web开发项目
-- [ ] 学习数据结构和算法基础
-- [ ] 参与一个开源项目
-
-### 长期目标 (1年+)
-
-- [ ] 掌握一门后端框架 (Django/Flask)
-- [ ] 学习前端现代框架 (React/Vue)
-- [ ] 深入学习数据科学
-- [ ] 贡献有意义的开源项目
-
-## 💭 学习感悟
-
-> "学习编程不仅仅是掌握语法和工具，更重要的是培养解决问题的思维方式和持续学习的能力。"
-
-编程学习是一个持续的过程，每天都有新的挑战和收获。我希望通过这个网站，不仅记录自己的学习历程，也能为其他学习者提供一些帮助和启发。
-
-------
-
-!!! quote "座右铭" **"Stay curious, stay coding!"**
-
-```
-保持好奇心，持续编程！
-```
-
-*感谢你的访问！如果你觉得这些内容有用，欢迎给我的 GitHub 仓库一个 ⭐ 或者与我交流学习心得！*
-
-------
-
-*页面最后更新: {git-revision-date-localized}*
+> 感谢你的访问！如果你觉得这些内容有用，欢迎给我的 GitHub 仓库一个 ⭐ 或者与我交流学习心得！希望未来你也多多开源呀~
