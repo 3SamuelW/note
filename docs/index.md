@@ -73,11 +73,11 @@
 
 ## 📊 学习目标
 
-!!! tip "2025 年学习计划"
-- 深入学习 Python 编程，包括数据科学、人工智能和 Web 开发
-- 对脑科学和脑机有更深入的了解和研究
-- 完成至少 3 个实际项目
-- 继续贡献开源项目
+!!! success "2025 年学习计划"
+    - 深入学习 Python 编程，包括数据科学、人工智能和 Web 开发
+    - 对脑科学和脑机有更深入的了解和研究
+    - 完成至少 3 个实际项目
+    - 继续贡献开源项目
 
 ---
 
@@ -88,9 +88,9 @@
 
 ---
 
-!!! tip "🚀"
-    欢迎探索我的学习世界！ 
-    Welcome to my learning journey!
-    Bienvenue dans mon univers d’apprentissage !
-    مرحبًا بكم في عالمي الدراسي!
-    Welkom in mijn leerwereld!
+> 🚀
+**欢迎来到我的学习世界！**
+**Welcome to my learning journey!**
+**Bienvenue dans mon univers d’apprentissage !**
+**مرحبًا بكم في عالمي الدراسي!**
+**Welkom in mijn leerwereld!**
