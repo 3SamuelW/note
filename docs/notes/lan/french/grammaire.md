@@ -149,6 +149,7 @@
 ## (X) Futur dans le passé
 
 - le **radical** du **[le futur simple](#le-futur-simple)** (*proche de infinitif*) + la **désinence** de **[l’imparfait](#l’imparfait)** (-ais, -ais, -ait, -ions, -iez, -aient)
+
 |             | je             | tu             | il             | nous            | vous           | ils              |
 | ----------- | -------------- | -------------- | -------------- | --------------- | -------------- | ---------------- |
 | **entrer**  | entrer**ais**  | entrer**ais**  | entrer**ait**  | entrer**ions**  | entrer**iez**  | entrer**aient**  |
@@ -180,6 +181,7 @@
 ## (XIII) Conditionnel présent
 
 - **même que** **X: [Futur dans le passé](#futur-dans-le-passé)**
+
 |             | je          | tu          | il/elle/on    | nous         | vous         | ils/elles     |
 |-------------|-------------|-------------|---------------|--------------|--------------|---------------|
 | **parler**  | parler**ais** | parler**ais** | parler**ait** | parler**ions** | parler**iez** | parler**aient** |
@@ -257,14 +259,14 @@
 | **penser que** *(négatif)*             | je **ne pense pas que**…                                     |
 | **croire que** *(négatif)*             | je **ne crois pas que**…                                     |
 | **conjonctions**                       | **bien que, quoique, pour que, afin que, avant que, à moins que, sans que, de peur que, jusqu’à ce que, à condition que, …** |
-> *Remarque : **penser/croire que**  
->  
-> - **affirmation** → *indicatif*  
->   - Je pense que tu **es** prêt.  
->   - Je crois qu’il **vient** ce soir.  
-> - **négation ou doute** → *subjonctif*  
->   - Je ne pense pas que tu **sois** prêt.  
->   - Est-ce que tu crois qu’il **vienne** ce soir ?  
+
+!!! tip "*Remarque* : **penser/croire que**"  
+	- **affirmation** → *indicatif*  
+		- Je pense que tu **es** prêt.  
+		- Je crois qu’il **vient** ce soir.  
+	- **négation ou doute** → *subjonctif*  
+		- Je ne pense pas que tu **sois** prêt.  
+		- Est-ce que tu crois qu’il **vienne** ce soir ?  
 
 ------
 **3. Formation**
@@ -305,6 +307,6 @@
 | **venir**   | vienn**e**  | vienn**es**  | vienn**e**  | ven**ions**   | ven**iez**   | vienn**ent**  |
 | **prendre** | prenn**e**  | prenn**es**  | prenn**e**  | pren**ions**  | pren**iez**  | prenn**ent**  |
 
-> *Remarque : pour “venir” et “prendre” le radical change :
->  -  pour *je/tu/il/ils* → *vienn- / prenn-*
->  -  pour *nous/vous* → *ven-   / pren-*
+!!! tip "*Remarque* : pour “venir” et “prendre” le radical change :"
+	-  pour *je/tu/il/ils* → *vienn- / prenn-*
+	-  pour *nous/vous* → *ven-   / pren-*
