@@ -11,7 +11,7 @@ Having learned so much from others' shared notes and resources, I'm excited to g
 ## 📫 联系方式
 
 - 🐙 **GitHub**: [3SamuelW](https://github.com/3SamuelW)
-- 📧 **Email**: [3smauelw@gmail.com]([3samuelw@gmail.com](mailto:3samuelw@gmail.com))
+- 📧 **Email**: [3samuelw@gmail.com](mailto:3samuelw@gmail.com)
 - 🌐 **网站**: https://3samuelw.github.io/note/
 
 ## 📈 关于这个网站

@@ -1,6 +1,6 @@
 # La grammaire des temps en français
 
-## (I) Présent
+## (I) Présent{#present}
 
 |  | je | tu | il | nous | vous | ils |
 | --- | --- | --- | --- | --- | --- | --- |
