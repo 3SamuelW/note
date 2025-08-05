@@ -42,12 +42,17 @@ nav:
     - BME课程 🎓: 
       - 工程生理学: 
         - notes/bme/engineering-physiology/index.md
-        - 课程笔记: notes/bme/engineering-physiology/notes.pdf
-        - 课程习题: notes/bme/engineering-physiology/exercise.pdf
-        - 课程教材: notes/bme/engineering-physiology/textbook.pdf
-        - 教材配套习题: notes/bme/engineering-physiology/textbook-e.pdf
-        - 考试复习习题背诵版: notes/bme/engineering-physiology/exercise-e.pdf
-
+        - 课程笔记(⬇️pdf): notes/bme/engineering-physiology/notes.pdf
+        - 课程习题(⬇️pdf): notes/bme/engineering-physiology/exercise.pdf
+        - 课程教材(⬇️pdf): notes/bme/engineering-physiology/textbook.pdf
+        - 教材配套习题(⬇️pdf): notes/bme/engineering-physiology/textbook-e.pdf
+        - 考试复习习题背诵版(⬇️pdf): notes/bme/engineering-physiology/exercise-e.pdf
+    - 语言学习 🌏:
+      - 阿拉伯语/العربية:
+        - 学习笔记: notes/lan/arabic/arabic.md
+      - 法语/Français:
+        - 学习笔记: notes/lan/french/french.md
+        - 法语语法整理: notes/lan/french/grammaire.md
   - 👨‍💻 编程学习:
     - programming/index.md
     - 🐍 Python:
