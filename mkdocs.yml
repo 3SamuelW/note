@@ -1,7 +1,7 @@
-site_name: Samuel's 学习笔记
+site_name: Samuel's 学习工作站
 site_url: https://3samuelw.github.io/note/
 site_author: Samuel Wang
-site_description: "记录我的编程学习之路和项目经验"
+site_description: "记录并分享我的学习与项目经历"
 
 theme:
   name: material
@@ -38,15 +38,17 @@ extra_javascript:
 nav:
   - 🏠 首页: index.md
   - 📝 课程笔记: 
-    - notes/index.md
+    - 笔记目录: notes/index.md
     - BME课程 🎓: 
       - 工程生理学: 
-        - notes/bme/engineering-physiology/index.md
+        - 摘要: notes/bme/engineering-physiology/index.md
         - 课程笔记(⬇️pdf): notes/bme/engineering-physiology/notes.pdf
         - 课程习题(⬇️pdf): notes/bme/engineering-physiology/exercise.pdf
         - 课程教材(⬇️pdf): notes/bme/engineering-physiology/textbook.pdf
         - 教材配套习题(⬇️pdf): notes/bme/engineering-physiology/textbook-e.pdf
         - 考试复习习题背诵版(⬇️pdf): notes/bme/engineering-physiology/exercise-e.pdf
+    - CS课程 👨‍💻:
+      - 缘起: notes/cs/signup.md
     - 语言学习 🌏:
       - 阿拉伯语/العربية:
         - 学习笔记: notes/lan/arabic/arabic.md
@@ -54,6 +56,10 @@ nav:
       - 法语/Français:
         - 学习笔记: notes/lan/french/french.md
         - 法语语法整理: notes/lan/french/grammaire.md
+    - Samuel学BCI 🧠:
+      - 说明: notes/bme/bci/index.md
+      - 神经科学基础与疾病: notes/bme/neuroscience/notes.md
+      - 神经生物学: notes/bme/neurobiology/notes.md
   # - 👨‍💻 编程学习:
   #   - programming/index.md
   #   - 🐍 Python:
