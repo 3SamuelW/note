@@ -57,9 +57,9 @@ nav:
         - 学习笔记: notes/lan/french/french.md
         - 法语语法整理: notes/lan/french/grammaire.md
     - Samuel学BCI 🧠:
-      - 说明: notes/bme/bci/index.md
-      - 神经科学基础与疾病: notes/bme/neuroscience/notes.md
-      - 神经生物学: notes/bme/neurobiology/notes.md
+      - 说明: notes/bci/index.md
+      - 神经科学基础与疾病: notes/bci/neuroscience/notes.md
+      - 神经生物学: notes/bci/neurobiology/notes.md
   # - 👨‍💻 编程学习:
   #   - programming/index.md
   #   - 🐍 Python:
