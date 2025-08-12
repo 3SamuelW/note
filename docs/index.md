@@ -7,17 +7,17 @@
 ---
 
 ## 🎯 网站导航
-<div class="home-card">
 
 <div class="home-card">
   <h3>📝 <a href="notes/">课程笔记</a></h3>
   <p>记录并持续更新我参与的 ZJU 课程笔记与相关资料</p>
   <ul>
     <li><strong><a href="notes/bme/engineering-physiology/">工程生理学</a></strong>：收录有课程笔记、习题、配套教材等内容</li>
-    <li><strong><a href="notes/lan/notes/lan/french/grammaire.md">法语时态笔记</a></strong>：收录法语 I 至法语 IV 课程所学的全部时态</li>
+    <li><strong><a href="notes/lan/french/grammaire.md">法语时态笔记</a></strong>：收录法语 I 至法语 IV 课程所学的全部时态</li>
     <li><strong><a href="notes/bci/">BCI 学习记录</a></strong>：记录有关脑机接口的知识学习笔记和心得</li>
   </ul>
 </div>
+
 <div class="home-card">
   <h3>🚀 <a href="projects/">项目展示</a></h3>
   <p>展示我完成的各种项目，包括：</p>
@@ -28,7 +28,6 @@
   </ul>
 </div>
 
-
 <div class="home-card">
   <h3>🛠️ <a href="tools/">工具资源</a></h3>
   <p>分享有用的开发工具、教程和资源</p>
@@ -37,8 +36,6 @@
     <li><a href="tools/useful-resources/">学习资源整理</a></li>
     <li><a href="tools/tutorials/">实用教程收集</a></li>
   </ul>
-</div>
-
 </div>
 
 ---
