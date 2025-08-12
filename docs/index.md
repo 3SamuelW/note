@@ -12,9 +12,9 @@
   <h3>📝 <a href="notes/">课程笔记</a></h3>
   <p>记录并持续更新我参与的 ZJU 课程笔记与相关资料</p>
   <ul>
-    <li><strong><a href="/notes/bme/engineering-physiology/">工程生理学</a></strong>：收录有课程笔记、习题、配套教材等内容</li>
-    <li><strong><a href="/notes/lan/french/">法语时态笔记</a></strong>：收录法语 I 至法语 IV 课程所学的全部时态</li>
-    <li><strong><a href="/notes/bci/">BCI 学习记录</a></strong>：记录有关脑机接口的知识学习笔记和心得</li>
+    <li><strong><a href="notes/bme/engineering-physiology/">工程生理学</a></strong>：收录有课程笔记、习题、配套教材等内容</li>
+    <li><strong><a href="notes/lan/french/">法语时态笔记</a></strong>：收录法语 I 至法语 IV 课程所学的全部时态</li>
+    <li><strong><a href="notes/bci/">BCI 学习记录</a></strong>：记录有关脑机接口的知识学习笔记和心得</li>
   </ul>
 </div>
 
