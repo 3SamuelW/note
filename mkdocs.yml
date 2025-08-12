@@ -81,6 +81,7 @@ plugins:
       locale: zh
 
 markdown_extensions:
+  - attr_list
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
