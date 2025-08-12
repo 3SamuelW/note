@@ -27,7 +27,6 @@ theme:
     - content.code.copy
     - content.tabs.link
     - toc.follow
-    - toc.integrate
   icon:
     repo: fontawesome/brands/github
 
