@@ -53,7 +53,7 @@ nav:
     - 语言学习 🌏:
       - 阿拉伯语/العربية:
         - 学习笔记: notes/lan/arabic/arabic.md
-        - 配套教材(⬇️pdf): notes/lan/arabic/MasteringArabic1.pdf
+        # - 配套教材(⬇️pdf): notes/lan/arabic/MasteringArabic1.pdf
       - 法语/Français:
         - 学习笔记: notes/lan/french/french.md
         - 法语语法整理: notes/lan/french/grammaire.md
