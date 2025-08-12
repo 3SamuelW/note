@@ -79,6 +79,7 @@ plugins:
   - git-revision-date-localized:
       fallback_to_build_date: true
       locale: zh
+  - glightbox
 
 markdown_extensions:
   - attr_list
@@ -93,6 +94,8 @@ markdown_extensions:
       custom_checkbox: true
   - admonition
   - pymdownx.details
+  - md_in_html
+  - pymdownx.blocks.caption
 
 repo_url: https://github.com/3SamuelW/note
 edit_uri: edit/main/docs/
