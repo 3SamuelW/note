@@ -42,6 +42,7 @@ nav:
     - BME课程 🎓: 
       - 工程生理学: 
         - 摘要: notes/bme/engineering-physiology/index.md
+        - 课程笔记: notes/bme/engineering-physiology/notes-online.md
         - 课程笔记(⬇️pdf): notes/bme/engineering-physiology/notes.pdf
         - 课程习题(⬇️pdf): notes/bme/engineering-physiology/exercise.pdf
         - 课程教材(⬇️pdf): notes/bme/engineering-physiology/textbook.pdf
@@ -62,22 +63,6 @@ nav:
       - 说明: notes/bci/index.md
       - 神经科学基础与疾病: notes/bci/neuroscience/notes.md
       - 神经生物学: notes/bci/neurobiology/notes.md
-  # - 👨‍💻 编程学习:
-  #   - programming/index.md
-  #   - 🐍 Python:
-  #     - programming/python/index.md
-  #     - Python基础: programming/python/basics.md
-  #     - Python进阶: programming/python/advanced.md
-  #     - Python项目: programming/python/projects.md
-  #   - 🌐 Web开发:
-  #     - programming/web-development/index.md
-  #     - HTML/CSS: programming/web-development/html-css.md
-  #     - JavaScript: programming/web-development/javascript.md
-  #     - 框架学习: programming/web-development/frameworks.md
-  #   - 📊 算法与数据结构:
-  #     - programming/algorithms/index.md
-  #     - 数据结构: programming/algorithms/data-structures.md
-  #     - 算法笔记: programming/algorithms/algorithm-notes.md
   - 🚀 项目展示:
     - projects/index.md
     # - 项目A: projects/project-a.md
@@ -87,10 +72,6 @@ nav:
     - 开发工具: tools/development-tools.md
     - 有用资源: tools/useful-resources.md
     - 教程收集: tools/tutorials.md
-  # - 📝 博客:
-  #   - blog/index.md
-  #   - 学习历程: blog/2025/learning-journey.md
-  #   - 技术思考: blog/tech-thoughts.md
   - 👤 关于我: about.md
 
 plugins:
