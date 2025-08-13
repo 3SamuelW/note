@@ -249,57 +249,58 @@ DL3:    LCALL   DELAY_2MS       ; 2ms延时
     - ![Figure 2.3.1.1](./_image/2-1.png)
 
 - 下面展示的内容为乘法子函数与调用示例（以 f1 的调用为例）。
-	- ```
-	    ; =================================================
-	    ; use f1 as an example
-	        ; set the loop counter(multiplier2) for this time
-	        MOV MULN, DAT34 
-	        ; use DAT34, so that we can change teh value easily and corrrectly if needed
-	        MOV MULL, TL
-	        MOV MULH, TH
-	        LCALL MUL_EXE   ; use LCALL rather than SJMP to enable using RET later
-	    
-	        ; store the data of formula1
-	        MOV RCF1, OMULC
-	        MOV RLF1, OMULL
-	        MOV RHF1, OMULH
-	    
-	    ; =================================================
-	    MUL_EXE:
-	        CLR C
-	        ; set the loop counter as the multiplier2
-	        MOV LC, MULN
-	    
-	        ; reset the multiplication result
-	        MOV OMULC, #0
-	        MOV OMULH, #0
-	        MOV OMULL, #0
-	    
-	        SJMP MUL_LOOP
-	    
-	    MUL_LOOP:
-	        ; add T low
-	        MOV A, OMULL
-	        ADD A, MULL
-	        MOV OMULL, A
-	    
-	        ; add T high and carry
-	        MOV A, OMULH
-	        ADDC A, MULH
-	        MOV OMULH, A
-	    
-	        ; add the carry to the MULcarry
-	        MOV A, OMULC
-	        ADDC A, #0
-	        MOV OMULC, A
-	    
-	        ; break from the loop when loops are enough (R2 = 0)
-	        DJNZ LC, MUL_LOOP
-	        SJMP MUL_DONE
-	    
-	    MUL_DONE:
-	        RET
-	    ```
+
+```
+; =================================================
+; use f1 as an example
+    ; set the loop counter(multiplier2) for this time
+    MOV MULN, DAT34 
+    ; use DAT34, so that we can change teh value easily and corrrectly if needed
+    MOV MULL, TL
+    MOV MULH, TH
+    LCALL MUL_EXE   ; use LCALL rather than SJMP to enable using RET later
+
+    ; store the data of formula1
+    MOV RCF1, OMULC
+    MOV RLF1, OMULL
+    MOV RHF1, OMULH
+
+; =================================================
+MUL_EXE:
+    CLR C
+    ; set the loop counter as the multiplier2
+    MOV LC, MULN
+
+    ; reset the multiplication result
+    MOV OMULC, #0
+    MOV OMULH, #0
+    MOV OMULL, #0
+
+    SJMP MUL_LOOP
+
+MUL_LOOP:
+    ; add T low
+    MOV A, OMULL
+    ADD A, MULL
+    MOV OMULL, A
+
+    ; add T high and carry
+    MOV A, OMULH
+    ADDC A, MULH
+    MOV OMULH, A
+
+    ; add the carry to the MULcarry
+    MOV A, OMULC
+    ADDC A, #0
+    MOV OMULC, A
+
+    ; break from the loop when loops are enough (R2 = 0)
+    DJNZ LC, MUL_LOOP
+    SJMP MUL_DONE
+
+MUL_DONE:
+    RET
+```
 
 - 如此编写，可以使子函数可以变得更加通用，对于本题即意味着 3 次乘法操作都可以直接调用这段函数处理，而不用使用重复、累赘的代码。并且，这样也可以使函数可以具有较强的迁移性，可以有较高的复用率。
 
@@ -309,72 +310,72 @@ DL3:    LCALL   DELAY_2MS       ; 2ms延时
 
 - 下面展示的内容为除法子函数与调用示例（以 f4 的调用为例）。
 
-    - ```
-        ; ========================================
-            ; do the division for f4 = (3 * C) * T / 200
-            ; set the divisor as 200d
-            MOV DIVL, RLF3
-            MOV DIVH, RHF3
-            MOV DIVN, DAT200
-            LCALL DIV_EXE
-        
-            ; store the data of formula4
-            MOV RCF4, OQC
-            MOV RLF4, OQL
-            MOV RHF4, OQH
-        
-        ; ========================================
-        DIV_EXE:
-            CLR C
-            ; reset the division result
-            MOV OQC, #0
-            MOV OQH, #0
-            MOV OQL, #0
-        
-        DIV_LOOP:
-            ; compare [DIVC, DIVH, DIVL] with 200d (11001000b)
-            MOV A, DIVC         ; check the C
-            JNZ DIV_SUB
-        
-            MOV A, DIVH         ; check the H
-            JNZ DIV_SUB         ; if H is not 0, then the remainder is larger than 200
-        
-            CLR C
-            MOV A, DIVL         ; check the L
-            SUBB A, DIVN        ; DIVN = 200
-            JC DIV_DONE         ; if remainder is less than 200, break
-            SJMP DIV_SUB
-        
-        DIV_SUB:
-            CLR C
-            ; execute the sub.
-            MOV A, DIVL
-            SUBB A, DIVN
-            MOV DIVL, A
-        
-            MOV A, DIVH
-            SUBB A, #0
-            MOV DIVH, A
-        
-            ; if sub., add 1 at the quotient
-            CLR C
-            MOV A, OQL
-            ADD A, #1
-            MOV OQL, A
-        
-            MOV A, OQH
-            ADDC A, #0
-            MOV OQH, A
-        
-            MOV A, OQC
-            ADDC A, #0
-            MOV OQC, A
-        
-            SJMP DIV_LOOP
-        
-        DIV_DONE:
-            RET
-        ```
+```
+; ========================================
+    ; do the division for f4 = (3 * C) * T / 200
+    ; set the divisor as 200d
+    MOV DIVL, RLF3
+    MOV DIVH, RHF3
+    MOV DIVN, DAT200
+    LCALL DIV_EXE
+
+    ; store the data of formula4
+    MOV RCF4, OQC
+    MOV RLF4, OQL
+    MOV RHF4, OQH
+
+; ========================================
+DIV_EXE:
+    CLR C
+    ; reset the division result
+    MOV OQC, #0
+    MOV OQH, #0
+    MOV OQL, #0
+
+DIV_LOOP:
+    ; compare [DIVC, DIVH, DIVL] with 200d (11001000b)
+    MOV A, DIVC         ; check the C
+    JNZ DIV_SUB
+
+    MOV A, DIVH         ; check the H
+    JNZ DIV_SUB         ; if H is not 0, then the remainder is larger than 200
+
+    CLR C
+    MOV A, DIVL         ; check the L
+    SUBB A, DIVN        ; DIVN = 200
+    JC DIV_DONE         ; if remainder is less than 200, break
+    SJMP DIV_SUB
+
+DIV_SUB:
+    CLR C
+    ; execute the sub.
+    MOV A, DIVL
+    SUBB A, DIVN
+    MOV DIVL, A
+
+    MOV A, DIVH
+    SUBB A, #0
+    MOV DIVH, A
+
+    ; if sub., add 1 at the quotient
+    CLR C
+    MOV A, OQL
+    ADD A, #1
+    MOV OQL, A
+
+    MOV A, OQH
+    ADDC A, #0
+    MOV OQH, A
+
+    MOV A, OQC
+    ADDC A, #0
+    MOV OQC, A
+
+    SJMP DIV_LOOP
+
+DIV_DONE:
+    RET
+```
 
 - 和乘法一样的，这样的编写方式可以使函数具有较高的复用性，可以在其他地方直接调用，而不用重复编写代码。尽管在这次实验中仅出现了一次调用，但是这样的处理也可以让程序架构更加清晰。
 
@@ -383,105 +384,105 @@ DL3:    LCALL   DELAY_2MS       ; 2ms延时
 
 -  以此设计程序片段如下：
 
-    - ```
-        ; =========================================================
-        ; Shift-Subtract Division Subroutine (for division by 200)
-        ; 24-bit dividend: DIVC (high), DIVH (mid), DIVL (low)
-        ; 8-bit divisor: DIVN (fixed = 200)
-        ; Result: 24-bit quotient -> OQC (high), OQH (mid), OQL (low)
-        ; =========================================================
-            SHIFTB  EQU 4FH
-        ; =========================================================
-        DIV_EXE_SHIFT:
-            ; Initialize: SHIFTB is an extra byte for handling the "9th bit" during shifting
-            MOV   SHIFTB, #0
-            MOV   R7, #24          ; Loop counter for 24 shifts(24 bits in total)
-        
-            ; Move DIVC:DIVH:DIVL to (B, DPH, DPL, SHIFTB) for shifting
-            MOV   DPL, DIVL
-            MOV   DPH, DIVH
-            MOV   B,   DIVC
-        
-            ; Clear quotient (24-bit)
-            CLR   OQL
-            CLR   OQH
-            CLR   OQC
-        
-        DIV_LOOP:
-            ; 1) Left shift quotient (OQC:OQH:OQL)
-            CLR   C
-            MOV   A, OQL
-            RLC   A
-            MOV   OQL, A
-            MOV   A, OQH
-            RLC   A
-            MOV   OQH, A
-            MOV   A, OQC
-            RLC   A
-            MOV   OQC, A
-        
-            ; 2) Left shift dividend (SHIFTB, B, DPH, DPL)
-            CLR   C
-            MOV   A, DPL
-            RLC   A
-            MOV   DPL, A
-            MOV   A, DPH
-            RLC   A
-            MOV   DPH, A
-            MOV   A, B
-            RLC   A
-            MOV   B, A
-            MOV   A, SHIFTB
-            RLC   A
-            MOV   SHIFTB, A
-        
-            ; If carry is 1, the shifted number is 9-bit (≥ 256)
-            ; In this case, directly subtract 200 by adding (256 - 200) = 56
-            JNC   DIV_1
-        DIV_0:
-            ; subtract 200
-            CLR   C
-            MOV   A, SHIFTB
-            SUBB  A, DAT200
-            MOV   SHIFTB, A
-        
-            ; Set the least significant bit of quotient to 1
-            ORL   OQL, #1
-            SJMP  END_LOOP
-        
-        DIV_1:
-            ; Check if SHIFTB (highest byte) is greater than or equal to the divisor (200)
-            MOV   A, SHIFTB
-            CLR   C
-            SUBB  A, DIVN
-            JC    NO_SUB          ; If borrow occurs, do not subtract
-        
-            ; If subtraction is possible, set the least significant bit of quotient to 1
-            ORL   OQL, #1
-        
-            ; Store the result of SHIFTB - 200
-            MOV   SHIFTB, A
-            ; Also subtract carry from B, DPH, DPL (effectively subtracting 200)
-            MOV   A, B
-            SUBB  A, #0
-            MOV   B, A
-            MOV   A, DPH
-            SUBB  A, #0
-            MOV   DPH, A
-            MOV   A, DPL
-            SUBB  A, #0
-            MOV   DPL, A
-        
-        NO_SUB:
-            ; If borrow occurred above, do not set quotient bit
-            ; Otherwise, ORL 3BH, #01H has already set the bit
-        
-        END_LOOP:
-            DJNZ  R7, DIV_LOOP
-            ; Now the quotient is stored in OQC:OQH:OQL
-            ; If remainder is needed, it is stored in (SHIFTB, B, DPH, DPL)
-            RET
-        ```
+```
+; =========================================================
+; Shift-Subtract Division Subroutine (for division by 200)
+; 24-bit dividend: DIVC (high), DIVH (mid), DIVL (low)
+; 8-bit divisor: DIVN (fixed = 200)
+; Result: 24-bit quotient -> OQC (high), OQH (mid), OQL (low)
+; =========================================================
+    SHIFTB  EQU 4FH
+; =========================================================
+DIV_EXE_SHIFT:
+    ; Initialize: SHIFTB is an extra byte for handling the "9th bit" during shifting
+    MOV   SHIFTB, #0
+    MOV   R7, #24          ; Loop counter for 24 shifts(24 bits in total)
+
+    ; Move DIVC:DIVH:DIVL to (B, DPH, DPL, SHIFTB) for shifting
+    MOV   DPL, DIVL
+    MOV   DPH, DIVH
+    MOV   B,   DIVC
+
+    ; Clear quotient (24-bit)
+    CLR   OQL
+    CLR   OQH
+    CLR   OQC
+
+DIV_LOOP:
+    ; 1) Left shift quotient (OQC:OQH:OQL)
+    CLR   C
+    MOV   A, OQL
+    RLC   A
+    MOV   OQL, A
+    MOV   A, OQH
+    RLC   A
+    MOV   OQH, A
+    MOV   A, OQC
+    RLC   A
+    MOV   OQC, A
+
+    ; 2) Left shift dividend (SHIFTB, B, DPH, DPL)
+    CLR   C
+    MOV   A, DPL
+    RLC   A
+    MOV   DPL, A
+    MOV   A, DPH
+    RLC   A
+    MOV   DPH, A
+    MOV   A, B
+    RLC   A
+    MOV   B, A
+    MOV   A, SHIFTB
+    RLC   A
+    MOV   SHIFTB, A
+
+    ; If carry is 1, the shifted number is 9-bit (≥ 256)
+    ; In this case, directly subtract 200 by adding (256 - 200) = 56
+    JNC   DIV_1
+DIV_0:
+    ; subtract 200
+    CLR   C
+    MOV   A, SHIFTB
+    SUBB  A, DAT200
+    MOV   SHIFTB, A
+
+    ; Set the least significant bit of quotient to 1
+    ORL   OQL, #1
+    SJMP  END_LOOP
+
+DIV_1:
+    ; Check if SHIFTB (highest byte) is greater than or equal to the divisor (200)
+    MOV   A, SHIFTB
+    CLR   C
+    SUBB  A, DIVN
+    JC    NO_SUB          ; If borrow occurs, do not subtract
+
+    ; If subtraction is possible, set the least significant bit of quotient to 1
+    ORL   OQL, #1
+
+    ; Store the result of SHIFTB - 200
+    MOV   SHIFTB, A
+    ; Also subtract carry from B, DPH, DPL (effectively subtracting 200)
+    MOV   A, B
+    SUBB  A, #0
+    MOV   B, A
+    MOV   A, DPH
+    SUBB  A, #0
+    MOV   DPH, A
+    MOV   A, DPL
+    SUBB  A, #0
+    MOV   DPL, A
+
+NO_SUB:
+    ; If borrow occurred above, do not set quotient bit
+    ; Otherwise, ORL 3BH, #01H has already set the bit
+
+END_LOOP:
+    DJNZ  R7, DIV_LOOP
+    ; Now the quotient is stored in OQC:OQH:OQL
+    ; If remainder is needed, it is stored in (SHIFTB, B, DPH, DPL)
+    RET
+```
 
 - 第二种处理方式需要进行大于等于 24 次移位，并且每次位移等处理步骤比较繁琐，在本题数据背景下进行粗浅的比较，它相对于第一种方法在时间复杂度上有一些微弱优势；但是，它的代码占用空间更大，且会需要使用一个额外寄存器，空间复杂度更高。在本题的数据背景下，两种处理方法各有优势。但是倘若处理的数据中被除数远远大于除数的性质，第二种方式将会体现出非常大的优势。
 
