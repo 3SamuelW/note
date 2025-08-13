@@ -27,6 +27,7 @@ theme:
     - content.code.copy
     - content.tabs.link
     - toc.follow
+    - mathjax
   icon:
     repo: fontawesome/brands/github
 
