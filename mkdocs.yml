@@ -38,21 +38,18 @@ extra_javascript:
 nav:
   - 🏠 首页: index.md
   - 📝 课程笔记: 
-    - 笔记目录: notes/index.md
     - BME课程 🎓: 
       - 工程生理学: 
         - 摘要: notes/bme/engineering-physiology/index.md
-        - 课程笔记(⬇️pdf): notes/bme/engineering-physiology/notes.pdf
-        - 课程习题(⬇️pdf): notes/bme/engineering-physiology/exercise.pdf
-        - 课程教材(⬇️pdf): notes/bme/engineering-physiology/textbook.pdf
-        - 教材配套习题(⬇️pdf): notes/bme/engineering-physiology/textbook-e.pdf
-        - 考试复习习题背诵版(⬇️pdf): notes/bme/engineering-physiology/exercise-e.pdf
+        - 课程笔记: notes/bme/engineering-physiology/notes-online.md
+      - 微机原理及应用:
+        - 摘要: notes/bme/micro-computer/index.md
+        - 实验报告: notes/bme/micro-computer/reports.md
     - CS课程 👨‍💻:
       - 缘起: notes/cs/signup.md
     - 语言学习 🌏:
       - 阿拉伯语/العربية:
         - 学习笔记: notes/lan/arabic/arabic.md
-        - 配套教材(⬇️pdf): notes/lan/arabic/MasteringArabic1.pdf
       - 法语/Français:
         - 学习笔记: notes/lan/french/french.md
         - 法语语法整理: notes/lan/french/grammaire.md
@@ -62,22 +59,6 @@ nav:
       - 说明: notes/bci/index.md
       - 神经科学基础与疾病: notes/bci/neuroscience/notes.md
       - 神经生物学: notes/bci/neurobiology/notes.md
-  # - 👨‍💻 编程学习:
-  #   - programming/index.md
-  #   - 🐍 Python:
-  #     - programming/python/index.md
-  #     - Python基础: programming/python/basics.md
-  #     - Python进阶: programming/python/advanced.md
-  #     - Python项目: programming/python/projects.md
-  #   - 🌐 Web开发:
-  #     - programming/web-development/index.md
-  #     - HTML/CSS: programming/web-development/html-css.md
-  #     - JavaScript: programming/web-development/javascript.md
-  #     - 框架学习: programming/web-development/frameworks.md
-  #   - 📊 算法与数据结构:
-  #     - programming/algorithms/index.md
-  #     - 数据结构: programming/algorithms/data-structures.md
-  #     - 算法笔记: programming/algorithms/algorithm-notes.md
   - 🚀 项目展示:
     - projects/index.md
     # - 项目A: projects/project-a.md
@@ -87,10 +68,6 @@ nav:
     - 开发工具: tools/development-tools.md
     - 有用资源: tools/useful-resources.md
     - 教程收集: tools/tutorials.md
-  # - 📝 博客:
-  #   - blog/index.md
-  #   - 学习历程: blog/2025/learning-journey.md
-  #   - 技术思考: blog/tech-thoughts.md
   - 👤 关于我: about.md
 
 plugins:
@@ -98,8 +75,10 @@ plugins:
   - git-revision-date-localized:
       fallback_to_build_date: true
       locale: zh
+  - glightbox
 
 markdown_extensions:
+  - attr_list
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
@@ -111,6 +90,8 @@ markdown_extensions:
       custom_checkbox: true
   - admonition
   - pymdownx.details
+  - md_in_html
+  - pymdownx.blocks.caption
 
 repo_url: https://github.com/3SamuelW/note
 edit_uri: edit/main/docs/
