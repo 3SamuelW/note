@@ -42,6 +42,9 @@ nav:
       - 工程生理学: 
         - 摘要: notes/bme/engineering-physiology/index.md
         - 课程笔记: notes/bme/engineering-physiology/notes-online.md
+      - 微机原理及应用:
+        - 摘要: notes/bme/micro-computer/index.md
+        - 实验报告: notes/bme/micro-computer/reports.md
     - CS课程 👨‍💻:
       - 缘起: notes/cs/signup.md
     - 语言学习 🌏:
