@@ -8,7 +8,7 @@
       updateScheme();
     })
   );
-  
+
   // 主色调切换
   document.querySelectorAll("button[data-md-color-primary]").forEach(btn =>
     btn.addEventListener("click", () => {
@@ -17,7 +17,7 @@
       localStorage.setItem("data-md-color-primary", p);
     })
   );
-  
+
   // 初始化主题
   (() => {
     const p = localStorage.getItem("data-md-color-primary");
@@ -25,7 +25,7 @@
     let s = localStorage.getItem("data-md-color-scheme") || "slate";
     document.body.setAttribute("data-md-color-scheme", s);
   })();
-  
+
   // 同步 Giscus 主题
   window.updateScheme = () => {
     const frame = document.querySelector(".giscus-frame");
@@ -36,7 +36,7 @@
       "https://giscus.app"
     );
   };
-  
+
   // 返回顶部按钮
   const createBackToTopButton = () => {
     const button = document.createElement('button');
@@ -59,13 +59,13 @@
       transition: all 0.3s ease;
       z-index: 1000;
     `;
-    
+
     button.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-    
+
     document.body.appendChild(button);
-    
+
     // 滚动显示/隐藏
     window.addEventListener('scroll', () => {
       if (window.scrollY > 300) {
@@ -77,11 +77,11 @@
       }
     });
   };
-  
+
   // 页面加载完成后初始化功能
   document.addEventListener('DOMContentLoaded', () => {
     createBackToTopButton();
-    
+
     // 代码块复制成功提示
     document.addEventListener('click', (e) => {
       if (e.target.matches('.md-clipboard')) {
@@ -99,8 +99,7 @@
             z-index: 9999;
             animation: fadeInOut 2s ease-in-out forwards;
           `;
-          
-          // 添加动画样式
+
           if (!document.getElementById('toast-styles')) {
             const style = document.createElement('style');
             style.id = 'toast-styles';
@@ -113,13 +112,13 @@
             `;
             document.head.appendChild(style);
           }
-          
+
           document.body.appendChild(tooltip);
           setTimeout(() => tooltip.remove(), 2000);
         }, 100);
       }
     });
-    
+
     // 图片懒加载优化
     if ('IntersectionObserver' in window) {
       const imageObserver = new IntersectionObserver((entries) => {
@@ -134,12 +133,12 @@
           }
         });
       });
-      
+
       document.querySelectorAll('img[data-src]').forEach(img => {
         imageObserver.observe(img);
       });
     }
-    
+
     // 外链新窗口打开
     document.querySelectorAll('a[href^="http"]').forEach(link => {
       if (!link.hostname.includes(window.location.hostname)) {
@@ -148,16 +147,15 @@
       }
     });
   });
-  
+
   console.log("🚀 网站功能已加载完成！");
   console.log("📚 欢迎来到 Samuel 的学习笔记！");
 
-
-  // === 追加 MathJax 配置 ===
+  // === MathJax 配置 ===
   window.MathJax = {
     tex: {
-      inlineMath: [["\\(", "\\)"]],
-      displayMath: [["\\[", "\\]"]],
+      inlineMath: [["$", "$"], ["\\(", "\\)"]],
+      displayMath: [["$$", "$$"], ["\\[", "\\]"]],
       processEscapes: true,
       processEnvironments: true
     },
@@ -167,29 +165,16 @@
     }
   };
 
-  // navigation.instant 切换页面时重新渲染
-  document$.subscribe(() => {
-    MathJax.startup.output.clearCache();
-    MathJax.typesetClear();
-    MathJax.texReset();
-    MathJax.typesetPromise();
-  });
-
-  console.log("🚀 网站功能已加载完成！");
-
-  document.addEventListener('DOMContentLoaded', () => {
+  // 渲染 MathJax 公式
+  function renderMathJax() {
     if (window.MathJax && window.MathJax.typesetPromise) {
       MathJax.typesetPromise()
-        .then(() => console.log('MathJax 初始渲染完成'))
+        .then(() => console.log("✅ MathJax 渲染完成"))
         .catch(err => console.error(err));
     }
-  });
+  }
 
-  document.addEventListener('navigation:end', () => {
-    if (window.MathJax && window.MathJax.typesetPromise) {
-      MathJax.typesetPromise()
-        .then(() => console.log('MathJax 页面切换后渲染完成'))
-        .catch(err => console.error(err));
-    }
-  });
+  document.addEventListener('DOMContentLoaded', renderMathJax);
+  document.addEventListener('navigation:end', renderMathJax);
+
 })();
