@@ -151,4 +151,29 @@
   
   console.log("🚀 网站功能已加载完成！");
   console.log("📚 欢迎来到 Samuel 的学习笔记！");
+
+  
+  // === 追加 MathJax 配置 ===
+  window.MathJax = {
+    tex: {
+      inlineMath: [["\\(", "\\)"]],
+      displayMath: [["\\[", "\\]"]],
+      processEscapes: true,
+      processEnvironments: true
+    },
+    options: {
+      ignoreHtmlClass: ".*|",
+      processHtmlClass: "arithmatex"
+    }
+  };
+
+  // navigation.instant 切换页面时重新渲染
+  document$.subscribe(() => {
+    MathJax.startup.output.clearCache();
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typesetPromise();
+  });
+
+  console.log("🚀 网站功能已加载完成！");
 })();

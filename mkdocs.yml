@@ -27,7 +27,6 @@ theme:
     - content.code.copy
     - content.tabs.link
     - toc.follow
-    - mathjax
   icon:
     repo: fontawesome/brands/github
 
@@ -35,6 +34,7 @@ extra_css:
   - extra.css
 extra_javascript:
   - extra.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
 
 nav:
   - 🏠 首页: index.md
@@ -93,6 +93,8 @@ markdown_extensions:
   - pymdownx.details
   - md_in_html
   - pymdownx.blocks.caption
+  - pymdownx.arithmatex:
+      generic: true
 
 repo_url: https://github.com/3SamuelW/note
 edit_uri: edit/main/docs/
