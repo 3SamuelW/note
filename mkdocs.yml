@@ -23,7 +23,7 @@ theme:
     - navigation.instant
     - navigation.top
     - navigation.sections
-    - navigation.expand
+    - navigation.tabs
     - content.code.copy
     - content.tabs.link
     - toc.follow
