@@ -152,7 +152,7 @@
   console.log("🚀 网站功能已加载完成！");
   console.log("📚 欢迎来到 Samuel 的学习笔记！");
 
-  
+
   // === 追加 MathJax 配置 ===
   window.MathJax = {
     tex: {
@@ -176,4 +176,20 @@
   });
 
   console.log("🚀 网站功能已加载完成！");
+
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.MathJax && window.MathJax.typesetPromise) {
+      MathJax.typesetPromise()
+        .then(() => console.log('MathJax 初始渲染完成'))
+        .catch(err => console.error(err));
+    }
+  });
+
+  document.addEventListener('navigation:end', () => {
+    if (window.MathJax && window.MathJax.typesetPromise) {
+      MathJax.typesetPromise()
+        .then(() => console.log('MathJax 页面切换后渲染完成'))
+        .catch(err => console.error(err));
+    }
+  });
 })();
