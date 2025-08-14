@@ -1,4 +1,4 @@
-# 项目展示 🚀
+# Bienvenue! 🚀
 
 这里展示了我在学习编程过程中完成的各种项目，从简单的练习项目到复杂的应用开发。
 
@@ -25,7 +25,7 @@
       <span class="tag">Matplotlib</span>
     </div>
   </div>
-  
+
   <div class="project-card">
     <h3>🌐 项目B - 个人博客系统</h3>
     <p>基于现代Web技术构建的响应式博客平台，支持Markdown写作。</p>

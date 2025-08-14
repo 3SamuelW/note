@@ -1,4 +1,4 @@
-# 工具资源 🛠️
+# Bienvenue! 🛠️
 
 这里整理了我在编程学习和开发过程中使用的各种工具、资源和教程，希望能对其他学习者有所帮助。
 
@@ -24,7 +24,7 @@
       <span class="tag">必备</span>
     </div>
   </div>
-  
+
   <div class="tool-card">
     <h3>🐙 Git & GitHub</h3>
     <p>版本控制和代码协作的最佳选择</p>
@@ -33,7 +33,7 @@
       <span class="tag">协作</span>
     </div>
   </div>
-  
+
   <div class="tool-card">
     <h3>🐍 Python.org</h3>
     <p>Python官方文档和教程，最权威的学习资源</p>
