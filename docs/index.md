@@ -9,7 +9,7 @@
 ## 🎯 网站导航
 
 <div class="home-card">
-  <h3>📝 <a href="/note/notes/index/">课程笔记</a></h3>
+  <h3>📝 课程笔记</h3>
   <p>记录并持续更新我参与的 ZJU 课程笔记与相关资料</p>
   <ul>
     <li><strong><a href="/note/notes/bme/engineering-physiology/">工程生理学</a></strong>：收录有课程笔记、习题、配套教材等内容</li>
