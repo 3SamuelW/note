@@ -22,10 +22,10 @@
 
 #### 资料说明 📎
 
-- **课程笔记：**我随堂整理的笔记，当时做这个的目的就是不想期末时间比较紧的情况下再翻阅整本书（实在是太厚了！），基本涵盖了上课老师提到的重要内容<br>[⬇️ 点击跳转：课程笔记 pdf 版](notes.pdf)
-- **课程习题：**学在浙大的作业题参考<br>[⬇️ 点击跳转：课程习题参考](exercise.pdf) [⬇️ 点击跳转：考试复习习题（背诵版）](exercise-e.pdf)
-- **课程教材：**《生理学》教材电子版<br>[⬇️ 点击跳转：课程教材](textbook.pdf)
-- **教材配套习题：**《生理学》教材官方配套练习<br>[⬇️ 点击跳转：教材配套习题](textbook-e.pdf)
+- **课程笔记：**我随堂整理的笔记，当时做这个的目的就是不想期末时间比较紧的情况下再翻阅整本书（实在是太厚了！），基本涵盖了上课老师提到的重要内容<br>[⬇️ 点击下载：课程笔记 pdf 版](https://github.com/3SamuelW/note/releases/download/v1.0/notes.pdf)
+- **课程习题：**学在浙大的作业题参考<br>[⬇️ 点击下载：课程习题参考](https://github.com/3SamuelW/note/releases/download/v1.0/exercise.pdf) [⬇️ 点击下载：考试复习习题（背诵版）](https://github.com/3SamuelW/note/releases/download/v1.0/exercise-e.pdf)
+- **课程教材：**《生理学》教材电子版<br>[⬇️ 点击下载：课程教材](https://github.com/3SamuelW/note/releases/download/v1.0/textbook.pdf)
+- **教材配套习题：**《生理学》教材官方配套练习<br>[⬇️ 点击下载：教材配套习题](https://github.com/3SamuelW/note/releases/download/v1.0/textbook-e.pdf)
 
 !!! quote "说明"
 	*近日将原先的 **markdown** 笔记进行了整理，可以在左侧菜单栏访问在线阅读；同时也可以点击上方链接下载 **pdf** 格式使用。*
