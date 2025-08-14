@@ -6,7 +6,7 @@
 	我的实验代码有部分来自于 `CC98 祖传代码` 借鉴，并在后续经过我和 `Claude`、`ChatGPT` 等多位良师益友的修改，基本都可以满足验收要求。<br>代码的注释有随心所欲的中英文混杂，敬请谅解！
 
 !!! warning "警告"
-	借鉴“光荣”，抄袭可耻！请勿照搬！
+	参考时请结合自己思考，请勿照搬！
 
 ## Lab1: 数码管循环显示
 
@@ -796,3 +796,1707 @@ WAIT:
 	- ![Figure 2.4.2.3](./_image/2-6.png)
 
 - 结合多次输入测试检验，可以得出实验设计符合预期的结论。
+
+## Lab3 流水灯与蜂鸣器
+
+### 一、实验任务
+
+#### 1.1 用延时方式编写流水灯程序
+#### 1.2 用中断方式编写蜂鸣器程序
+
+### 二、实验原理
+
+#### 2.1 流水灯与移位
+
+- 流水灯是一种通过控制多个 LED 依次点亮和熄灭形成动态视觉效果的基础电子实验。其核心原理在于利用循环移位与延时函数结合实现 LED 的状态切换。具体而言，单片机通过 I/O 端口输出特定电平信号驱动 LED。实验中，8 位 LED 连接至单片机的 P2 端口，初始状态下仅最低位 LED 点亮（对应 P2 初始值为 0xFE）。通过循环左移指令（RL A）改变 P2 的输出状态，使得 LED 的亮灭位置依次向左移动。延时函数通过多层嵌套循环消耗机器周期，模拟 500ms 的时间间隔，从而实现 LED 流动速度的控制。延时精度取决于晶振频率与循环次数的设定，需通过调整循环参数确保实际延时接近目标值。
+
+#### 2.2 蜂鸣器与中断
+- 蜂鸣器的发声原理基于单片机引脚输出波形的频率与占空比。实验中采用定时器中断技术生成特定频率的方波信号，通过 ULN2003 驱动蜂鸣器。定时器 1 设置为模式 1（16 位定时模式），其初值决定中断周期，进而控制输出方波的频率。例如，中八度 C4（261.63Hz）对应的定时器初值为 0xFF5F，通过定时器中断服务程序（ISR）周期性翻转 P1.5 引脚电平，生成占空比 50% 的方波。此外，程序通过查表法读取预设旋律编码（包含音符与休止符），结合延时函数控制音符持续时间，实现旋律的连续播放。中断方式的核心优势在于避免主程序阻塞，确保音频信号与延时控制的高效协同。
+
+### 三、实现思路
+
+#### 3.1 流水灯与移位
+
+- 流水灯程序的核心逻辑为循环移位与延时控制。程序初始化时，将 P2 端口置为 0xFE（二进制11111110），使最右侧 LED 点亮。主程序进入无限循环后，每次调用延时函数约 500ms，随后对 P2 当前值执行循环左移操作（RL A），更新 LED 显示状态。例如，初始状态 0xFE 左移后变为 0xFD（11111101），实现 LED 自右向左流动。延时函数通过三层嵌套循环消耗机器周期，结合晶振频率得出预期的总延时时间。程序的总流程图如 Figure 3.1.1 所示。
+	- ![Figure 3.3.1.1](./_image/3-1.png){width = "33%"}
+
+#### 3.2 蜂鸣器与中断
+
+- 蜂鸣器程序采用中断驱动与查表法结合的设计方案。主程序初始化定时器 1 为模式 1，并允许定时器 1 中断（IE寄存器设置为 0x88）。旋律数据存储于 MELODY_TABLE，每个音符编码包含八度（高4位）与音阶（低4位）。程序通过 DPTR 指针遍历旋律表，调用 GET_FREQ 子程序解析当前音符，从 LOW_TABLE、MID_TABLE 或 HIGH_TABLE 中获取对应定时器初值（R4、R5）。定时器1中断服务程序中，翻转 P1.5 引脚并重载初值，生成指定频率的方波。音符播放期间启动定时器 1，延时 200ms 后关闭蜂鸣器并插入 50ms 间隔；若遇到休止符（编码 0x00），则关闭定时器并延时 250ms。该设计通过分离音频生成与时间控制逻辑，实现了多音符旋律的流畅播放与资源高效利用。程序的的总流程图如 Figure 3.2.1 所示。
+	- ![Figure 3.3.2.1](./_image/3-2.png){width = "50%"}
+
+- 另外补充中断的执行流程如 Figure 3.2.2 所示。
+	- ![Figure 3.3.2.2](./_image/3-3.png){width = "33%"}
+
+###  四、代码与结果展示
+
+#### 4.1  实验代码与注释
+- 以下为“用延时方式编写流水灯程序”相关代码。
+
+```
+            ORG 0000H
+MAIN:       
+; 初始化：将 P2 置为 0xFE，表示最低位 LED 亮（假设 LED 与 P2 连接，低电平有效）
+            MOV P2, #0FEH    
+
+LOOP:       CALL DELAY      ; 延时约 500ms
+            MOV A, P2
+            RL A           ; 逻辑左移 1 位（将最高位移出后，结果为 0，则后续复位）
+            MOV P2, A      ; 更新 LED 显示
+            SJMP LOOP      ; 无限循环
+
+;---------------------------------------------------------
+; 延时子程序
+;---------------------------------------------------------
+DELAY:      MOV R2, #20H   ; 外层循环计数器（32 次）
+DELAY1:     MOV R1, #20H   ; 中层循环计数器（32 次）
+DELAY2:     MOV R0, #0FFH  ; 内层循环计数器（255 次）
+DELAY_INNER:
+            DJNZ R0, DELAY_INNER
+            DJNZ R1, DELAY2
+            DJNZ R2, DELAY1
+            RET
+
+            END
+
+```
+
+- 以下为“用中断方式编写蜂鸣器程序”相关代码。
+```
+; 寄存器分配：
+; R4/R5: 定时器重载值低/高字节
+; R7: 旋律计数器
+; R1: 当前音符编码
+; 晶振频率：12MHz
+
+ORG 0000H
+LJMP MAIN
+
+ORG 001BH                ; Timer1中断入口
+LJMP TIMER1_ISR
+
+TIMER1_ISR:              ; 中断服务程序：每次中断翻转蜂鸣器输出
+    CPL P1.5            ; 翻转P1.5，产生方波
+    ; 重新加载定时器1寄存器
+    MOV TL1, R4         ; 装载低字节
+    MOV TH1, R5         ; 装载高字节
+    RETI
+
+;-------------------------------
+; 主程序入口
+MAIN:
+    MOV SP, #70H
+    MOV TMOD, #11H      ; 设置定时器0为模式1，定时器1为模式1
+    MOV IE, #88H        ; 使能定时器1中断
+    CLR P1.5            ; 关闭蜂鸣器
+    MOV DPTR, #MELODY_TABLE
+    MOV R7, #MNOTES
+
+PLAY_LOOP:
+    ; 检查是否已经播放完整个旋律
+    CJNE R7, #00, READ_NOTE
+    MOV R7, #MNOTES     ; 重置音符计数器
+    MOV DPTR, #MELODY_TABLE  ; 重置旋律指针
+    
+READ_NOTE:
+    ; 读取当前音符
+    CLR A
+    MOVC A, @A+DPTR     ; 从表中读取音符编码
+    INC DPTR            ; 指针移至下一音符
+    MOV R1, A           ; 保存当前音符编码
+    
+    ; 无论R7是否为0，都处理当前音符
+    DEC R7              ; 递减计数器
+    
+    ; 判断是休止符还是正常音符
+    MOV A, R1
+    JZ NOTE_SILENCE     ; 如果是0，表示休止符
+
+    ; 处理音符
+    ACALL GET_FREQ
+    SETB TR1            ; 启动定时器1产生音频
+    MOV R2, #200        ; 音符持续200ms
+    ACALL DELAY_MS
+    CLR TR1    ;         ; 停止定时器1
+    CLR P1.5            ; 关闭蜂鸣器
+    MOV R2, #50         ; 间隔50ms
+    ACALL DELAY_MS
+    SJMP PLAY_LOOP
+
+NOTE_SILENCE:
+    CLR TR1             ; 确保定时器停止
+    CLR P1.5            ; 确保蜂鸣器关闭
+    MOV R2, #250        ; 休止符持续250ms
+    ACALL DELAY_MS
+    SJMP PLAY_LOOP
+
+;-------------------------------
+; 子程序：GET_FREQ（根据音符获取定时器重载值）
+GET_FREQ:
+    MOV A, R1
+    ANL A, #0F0H        ; 提取高4位（八度）
+    SWAP A
+    MOV R6, A           ; R6 = 八度号（1~3）
+
+    MOV A, R1
+    ANL A, #0FH         ; 提取低4位（音阶）
+    DEC A               ; 调整为0~6的索引
+    MOV B, #2
+    MUL AB              ; 计算查表偏移（音阶×2）
+    MOV R0, A
+
+    ; 根据八度选择查表
+    CJNE R6, #00, CHECK_MID
+    MOV DPTR, #LOW_TABLE
+    SJMP LOAD_FREQ
+CHECK_MID:
+    CJNE R6, #01, CHECK_HIGH
+    MOV DPTR, #MID_TABLE
+    SJMP LOAD_FREQ
+CHECK_HIGH:
+    MOV DPTR, #HIGH_TABLE
+
+LOAD_FREQ:
+    CLR A
+    MOV A, R0
+    MOVC A, @A+DPTR     ; 读取低字节
+    MOV R4, A           ; TL1
+    INC DPTR
+    CLR A
+    MOVC A, @A+DPTR     ; 读取高字节
+    MOV R5, A           ; TH1
+    RET
+
+;-------------------------------
+; 定时器函数
+DELAY_MS:
+    ; 保存当前TMOD的定时器1设置
+    MOV A, TMOD
+    ANL A, #0F0H        ; 保留高4位(定时器1的设置)
+    ORL A, #01H         ; 设置低4位为模式1(定时器0)
+    MOV TMOD, A
+
+DELAY_LOOP:
+    MOV TH0, #0FCh      ; 1ms初值（11.0592MHz）
+    MOV TL0, #018H
+    SETB TR0
+    JNB TF0, $
+    CLR TR0
+    CLR TF0
+    DJNZ R2, DELAY_LOOP
+    RET
+
+;-------------------------------
+; 频率查表数据
+LOW_TABLE:  ; 低八度 C3-B3
+    DW 0FC5FH, 0FD48H  ; C3(130.81Hz), D3(146.83Hz)
+    DW 0FDC4H, 0FE05H  ; E3(164.81Hz), F3(174.61Hz)
+    DW 0FE73H, 0FED4H  ; G3(196.00Hz), A3(220.00Hz)
+    DW 0FF26H          ; B3(246.94Hz)
+
+MID_TABLE:  ; 中八度 C4-B4
+    DW 0FF5FH, 0FFA4H  ; C4(261.63Hz), D4(293.66Hz)
+    DW 0FFE2H, 0FFF3H  ; E4(329.63Hz), F4(349.23Hz)
+    DW 0FFFAH, 0FFFCH  ; G4(392.00Hz), A4(440.00Hz)
+    DW 0FFFEH          ; B4(493.88Hz)
+
+HIGH_TABLE: ; 高八度 C5-B5
+    DW 0FFFFH, 0FFFFH  ; C5(523.25Hz), D5(587.33Hz)
+    DW 0FFFFH, 0FFFFH  ; E5(659.25Hz), F5(698.46Hz)
+    DW 0FFFFH, 0FFFFH  ; G5(783.99Hz), A5(880.00Hz)
+    DW 0FFFFH          ; B5(987.77Hz)
+
+MELODY_TABLE:
+    DB 11H, 31H, 25H, 15H, 16H, 11H, 25H, 00H
+    DB 24H, 24H, 23H, 23H, 22H, 22H, 21H, 00H
+
+MNOTES EQU 16  ; 音符总数（含休止符）
+SJMP $
+
+END
+```
+
+- 在代码中，为了程序更好的复用性，大部分功能已经实现封装，在修改播放音乐的时候只需要更改最后用于编曲的 MELODY_TABLE 和音符总数 MNOTES EQU N 的值即可。
+- 由于蜂鸣器的音调是通过定时器中断来实现的，所以实验中最后播放的音乐频率比较难高精度体现。
+
+!!! tip "说明"
+	我非常怀疑是程序哪一部分出现了错误，或者我选用中断的方式不可以实现音调控制，因为我的程序最后实际上没办法体现音调的高低（代码只能通过实验验收频率、节奏变化部分的要求，但是没有达到我最初设计的预期）。<br>在验收的时候看见有别的同学实现了编曲的功能，所以应该是我写的哪里出错了。学期中有点忙没时间仔细钻研，现在又忘了不少，只能留给后人研究了（）
+
+#### 4.2 Keil 编译结果显示
+
+- 对程序进行编译，Keil 提示没有产生错误。由于第一个实验内容比较简单，所以不进行过多测试。对于蜂鸣器进行测试调试，可以发现在该断点处寄存器 R4 和 R5 已经被更新上了 LOW_TABLE 的 FC5F 值，可以证明程序设计与运行的正确性。
+
+	- ![Figure 3.4.2.1](./_image/3-4.png)
+
+- 经过 Proteus 仿真得到的波形全局图和局部图如下所示。
+	- ![Figure 3.4.2.2](./_image/3-5.jpg)
+	- ![Figure 3.4.2.3](./_image/3-6.jpg)
+
+- 由于篇幅限制，不再展示其他调试界面。其余内容已于验收时说明。
+
+## Lab4 16键矩阵键盘
+
+### 一、实验任务
+
+#### 1.1 实现 16 键矩阵键盘
+
+- 编写 16 键矩阵键盘显示程序，实现按键与数码管显示的对应关系，其中数字 10 至 15 分别用字母 A、b、C、d、E、F 代替，并支持同一按键的连续操作（显示后再次按下可清屏）。实验需在开发板上直接实现，无需仿真工具，重点处理按键响应与显示逻辑。
+
+### 二、实验原理
+
+#### 2.1 实现 16 键矩阵键盘
+
+- 通过行列扫描法检测 4×4 矩阵键盘按键，即交替输出高低电平至行列线，根据电平变化定位按键行列位置，结合编码转换为对应键值。按键消抖采用软件延时法消除机械开关抖动干扰，确保信号稳定后读取键值，最终将结果映射至数码管显示。
+
+
+### 三、实现思路
+
+#### 3.1 实现 16 键矩阵键盘
+- 程序采用行列扫描法检测 4×4 矩阵键盘的按键状态，通过交替设置行线和列线的高低电平定位按键位置。
+- 首先进行列扫描，若检测到低四位电平变化则确认有按键按下，随后调用消抖延时子程序消除机械抖动干扰；再次验证后识别具体列号，再切换为行扫描模式确定行号，结合行列偏移值计算键值（如每一行加上不同基值）。通过查表将键值转换为数码管段码，并判断是否为重复按键：若当前键值与上次相同则清屏显示空白，否则更新显示内容。代码通过循环检测按键释放并二次消抖，确保每次触发仅响应一次有效操作。
+- 本程序的总流程图如下。
+
+```mermaid
+graph TD
+    %% 主程序流程
+    START([程序开始]) --> INIT[初始化数码管显示]
+    INIT --> SCAN[键盘扫描开始]
+    SCAN --> COL_SCAN[列扫描:P1低4位=0FH]
+    COL_SCAN --> COL_CHK{有按键按下?}
+    COL_CHK -- 否 --> SCAN
+    COL_CHK -- 是 --> DEBOUNCE1[消抖处理]
+    DEBOUNCE1 --> COL_CHK2{再次确认有按键?}
+    COL_CHK2 -- 否 --> SCAN
+    COL_CHK2 -- 是 --> ID_COL[识别列号]
+    
+    ID_COL --> COL_PROC{列号?}
+    COL_PROC -- 第0列 --> COL0[R0不变]
+    COL_PROC -- 第1列 --> COL1[R0+=1]
+    COL_PROC -- 第2列 --> COL2[R0+=2]
+    COL_PROC -- 第3列 --> COL3[R0+=3]
+    
+    COL0 --> ROW_SCAN
+    COL1 --> ROW_SCAN
+    COL2 --> ROW_SCAN
+    COL3 --> ROW_SCAN
+    
+    ROW_SCAN[行扫描:P1高4位=0F0H] --> ID_ROW[识别行号]
+    
+    ID_ROW --> ROW_PROC{行号?}
+    ROW_PROC -- 第0行 --> ROW0[R0不变]
+    ROW_PROC -- 第1行 --> ROW1[R0+=4]
+    ROW_PROC -- 第2行 --> ROW2[R0+=8]
+    ROW_PROC -- 第3行 --> ROW3[R0+=12]
+    
+    ROW0 --> WAIT
+    ROW1 --> WAIT
+    ROW2 --> WAIT
+    ROW3 --> WAIT
+    
+    WAIT[等待按键释放] --> WAIT_CHK{已释放?}
+    WAIT_CHK -- 否 --> WAIT
+    WAIT_CHK -- 是 --> DEBOUNCE2[释放消抖]
+    DEBOUNCE2 --> WAIT_CHK2{完全释放?}
+    WAIT_CHK2 -- 否 --> WAIT
+    WAIT_CHK3 -- 否 --> DISP[显示结果]
+    WAIT_CHK2 --> WAIT_CHK3{是否重复按键?}
+    WAIT_CHK3 -- 是 --> DISP2[清屏]
+    DISP --> SCAN
+    DISP2 --> SCAN
+    
+    %% 消抖子程序简化表示
+    DEBOUNCE_SUB[消抖子程序:双重延时循环<br>外循环R6=255<br>内循环R7=99]
+```
+
+### 四、代码与结果展示
+
+#### 4.1 实验代码与注释
+
+- 以下为“矩阵键盘”实现的相关代码。
+
+```
+; 键盘矩阵扫描及数码管显示程序
+; 功能：通过4x4矩阵键盘输入数字并在数码管上显示
+        ORG     0000H
+        LJMP    START
+
+        ORG     0030H
+START:
+        MOV     DPTR, #DISP_CODES   ; 初始化数码管显示代码表指针
+        MOV     A, #16              ; 索引16对应空白显示（加16对应00H）
+        MOVC    A, @A+DPTR
+        MOV     P0, A               ; 初始状态数码管不显示
+        MOV     R1, #255            ; 检测是否重复按
+
+SCAN_KEYPAD:
+        MOV     R0, #0              ; R0用于存储最终输出的数值
+        
+        ; 扫描列
+        MOV     A, #0FH             ; 低4位设置为高电平(列扫描)
+        MOV     P1, A
+        MOV     A, P1
+        CPL     A                   ; 取反
+        ANL     A, #0FH             ; 保留低4位
+        JZ      SCAN_KEYPAD         ; 无按键按下，继续扫描
+
+        ; 按键消抖
+        CALL    DEBOUNCE
+        
+        ; 再次检查按键状态
+        MOV     A, P1
+        CPL     A
+        ANL     A, #0FH
+        JZ      SCAN_KEYPAD         ; 如果是抖动，继续扫描
+        
+        ; 确认有按键，识别列号
+        CALL    IDENTIFY_COLUMN
+        
+        ; 进行行扫描
+        MOV     A, #0F0H            ; 高4位设置为高电平(行扫描)
+        MOV     P1, A
+        MOV     A, P1
+        CPL     A                   ; 取反
+        ANL     A, #0F0H            ; 保留高4位
+        
+        ; 识别行号并计算按键值
+        CALL    IDENTIFY_ROW
+        
+        ; 等待按键释放
+WAIT_RELEASE:
+        MOV     A, #0FH             ; 检查是否有按键仍被按下
+        MOV     P1, A
+        MOV     A, P1
+        CPL     A
+        ANL     A, #0FH
+        JNZ     WAIT_RELEASE        ; 有按键仍被按下，继续等待
+        
+        ; 释放消抖
+        CALL    DEBOUNCE
+        
+        ; 确认完全释放
+        MOV     A, #0FH
+        MOV     P1, A
+        MOV     A, P1
+        CPL     A
+        ANL     A, #0FH
+        JNZ     WAIT_RELEASE        ; 如有按键，继续等待释放
+        
+        ; 显示结果
+        MOV     A, R0               ; 获取计算好的键值
+        MOVC    A, @A+DPTR          ; 查表获取显示代码
+        PUSH    ACC
+
+        CLR     C
+        SUBB    A, R1
+        JNZ     NOCLEAR  
+
+        MOV     A, #16
+        MOVC    A, @A+DPTR
+        LJMP    CLEAR
+
+NOCLEAR:
+        POP     ACC
+        MOV     R1, A
+        MOV     P0, A               ; 输出到数码管
+        LJMP    SCAN_KEYPAD         ; 循环扫描
+
+CLEAR:      
+        MOV     P0, A               ; 输出到数码管
+        POP     ACC
+        MOV     R1, #255            ; 恢复至无读入记录状态
+        LJMP    SCAN_KEYPAD
+SHOW:
+
+; 子程序: 按键消抖
+
+; 原先设置了100，效果不是很好，直接加到255
+DEBOUNCE:
+        MOV     R6, #255
+DLY_LOOP:
+        MOV     R7, #99
+        DJNZ    R7, $               ; 延时循环
+        DJNZ    R6, DLY_LOOP
+        RET
+
+; 子程序: 识别列号
+IDENTIFY_COLUMN:
+        MOV     R4, A               ; 保存列状态
+        
+        ; 检查第3列，若在第3列，那么就会是0000 0001，
+        ; 0000 0001 XOR 0000 0001 = 0000 0000，即被检测到
+        MOV     A, R4
+        XRL     A, #01H             ; 检查是否是第3列(0001)
+        JZ      SET_COL3
+        
+        ; 检查第2列
+        MOV     A, R4
+        XRL     A, #02H             ; 检查是否是第2列(0010)
+        JZ      SET_COL2
+        
+        ; 检查第1列
+        MOV     A, R4
+        XRL     A, #04H             ; 检查是否是第1列(0100)
+        JZ      SET_COL1
+        
+        ; 检查第0列
+        MOV     A, R4
+        XRL     A, #08H             ; 检查是否是第0列(1000)
+        JZ      SET_COL0
+        
+        ; 在多键同时按下时直接返回扫描，而非继续判断
+        ; 将原来的 LJMP IDENTIFY_COLUMN 改为:
+        LJMP    SCAN_KEYPAD
+
+; 分别 +3/2/1/0   
+SET_COL3:
+        INC     R0                  ; +3
+SET_COL2:
+        INC     R0                  ; +2
+SET_COL1:
+        INC     R0                  ; +1
+SET_COL0:
+        RET
+
+; 子程序: 识别行号并计算按键值
+IDENTIFY_ROW:
+        MOV     R5, A               ; 保存行状态
+        
+        ; 检查第3行
+        MOV     A, R5
+        XRL     A, #10H             ; 检查是否是第3行(0001 0000)
+        JZ      SET_ROW3
+        
+        ; 检查第2行
+        MOV     A, R5
+        XRL     A, #20H             ; 检查是否是第2行(0010 0000)
+        JZ      SET_ROW2
+        
+        ; 检查第1行
+        MOV     A, R5
+        XRL     A, #40H             ; 检查是否是第1行(0100 0000)
+        JZ      SET_ROW1
+        
+        ; 检查第0行
+        MOV     A, R5
+        XRL     A, #80H             ; 检查是否是第0行(1000 0000)
+        JZ      SET_ROW0
+        
+        ; 未识别到有效行，重新检测
+        LJMP    IDENTIFY_COLUMN
+        
+SET_ROW3:
+        MOV     A, R0
+        ADD     A, #12              ; 第3行: 基值+12
+        MOV     R0, A
+        RET
+        
+SET_ROW2:
+        MOV     A, R0
+        ADD     A, #8               ; 第2行: 基值+8
+        MOV     R0, A
+        RET
+        
+SET_ROW1:
+        MOV     A, R0
+        ADD     A, #4               ; 第1行: 基值+4
+        MOV     R0, A
+        
+SET_ROW0:                           ; 第0行: 保持基值
+        RET
+
+; 数码管显示代码表
+        ORG     0600H
+DISP_CODES:
+        DB      3FH, 06H, 5BH, 4FH  ; 0-3
+        DB      66H, 6DH, 7DH, 07H  ; 4-7
+        DB      7FH, 6FH, 77H, 7CH  ; 8-B
+        DB      39H, 5EH, 79H, 71H  ; C-F
+        DB      00H                 ; 空白显示
+
+        END
+```
+
+#### 4.2 Keil 编译结果显示
+
+- 对程序进行编译，Keil 提示没有产生错误。
+	- ![Figure 4.4.2.1](./_image/4-1.png) {width = "100%""}
+
+#### 4.3 开发板调试图像
+- 生成程序，并在开发板上操作。
+	- 开机界面
+		- ![Figure 4.4.3.1](./_image/4-2.jpg) {width = "33%""}
+    - 按 1 一次显示
+    	- ![Figure 4.4.3.2](./_image/4-3.jpg) {width = "33%""}
+	- 按 1 两次清屏
+    	- ![Figure 4.4.3.3](./_image/4-4.jpg) {width = "33%""}
+	- 按 1 三次恢复
+    	- ![Figure 4.4.3.4](./_image/4-5.jpg) {width = "33%""}
+    
+    - 其余按键也可以正常显示。下面四图依次展示按 4、6、C、E 按键的显示值。
+    	- ![Figure 4.4.3.5](./_image/4-6.jpg) {width = "33%""}
+    	- ![Figure 4.4.3.6](./_image/4-7.jpg) {width = "33%""}
+    	- ![Figure 4.4.3.7](./_image/4-8.jpg) {width = "33%""}
+	  	- ![Figure 4.4.3.8](./_image/4-9.jpg) {width = "33%""}
+	
+- 由于篇幅限制，不再展示其他图像。其余内容已于验收时说明。
+
+## Lab5 基于 DS18B20 的测温实验
+
+### 一、实验任务
+
+#### 1.1 基于 DS18B20 的测温实验
+
+- 本次实验要求先深入研读 DS18B20 数据手册，熟悉其单线总线的工作原理与时序结构；然后在开发板上通过单线初始化、Skip ROM、Convert T 和 Read Scratchpad 等命令，实现温度数据的采集和处理，将测得的温度（整数部分）以“123 ℃”的形式动态扫描显示在四位共阴极数码管上。
+
+###  二、实验原理
+
+#### 2.1 总线初始化与存在响应
+
+- 主控单片机首先向 DS18B20 拉低单线总线至少 480 μs，发出复位脉冲；随后释放总线，由上拉电阻将线拉高，DS18B20 在检测到这个上升沿后等待约 15–60 μs，再通过拉低总线 60–240 μs 发出“存在脉冲”，告知主机传感器在线并已准备好通信。
+	- ![Figure 5.2.1.1](./_image/5-1.png) {width = "100%""}
+
+#### 2.2 写入与读取时隙时序
+
+- 在一个写时隙中，主机也拉低总线开始计时：若需写入“1”，则在拉低后约 1–15 μs 内释放总线；若写入“0”，则持续拉低 60–120 μs；每个写时隙总长需 ≥ 60 μs，且时隙间要留 ≥ 1 μs 恢复时间。读时隙同样由主机先拉低 ≥ 1 μs 再释放，总长 ≥ 60 μs；DS18B20 在拉低后约 15 μs 内把当前位电平（拉高为 “1”，拉低为 “0”）驱动到总线上，主机需在此窗口内采样。
+
+- 以下展示的依次是向测温模块写和读的时序图。
+	- ![Figure 5.2.2.1](./_image/5-2.png) {width = "100%""}
+	- ![Figure 5.2.2.2](./_image/5-3.png) {width = "100%""}
+
+### 2.3  温度转换与数据框架
+
+- 主机通过 Skip ROM 命令跳过寻址后，发送 Convert T（0x44）指令启动温度转换，该过程约需 100 ms；转换完成后，再初始化并用 Skip ROM + Read Scratchpad（0xBE）命令组合，逐位读出存储温度的低、高两个字节。DS18B20 将温度值按 1/16 ℃ 分辨率存储于这两个字节中，高位含符号，低位四位为小数部分。
+
+### 2.4 温度数据解析与数码管显示
+
+- 读回两字节后，先剥离高字节的符号和整值位，再提取低字节的高四位合成整数温度；将低字节的低四位乘以 0.0625（即 6.25%）得到小数部分。处理后得到的整数和小数值分别映射到数码管的各位，通过动态扫描方式在四位共阴极管上显示“XXX℃”，实现实时温度读数的可视化。
+
+### 三、实现思路
+
+- 程序从复位向量进入主入口，在这一模块里，首先通过 MOV 41H, #0 将温度单位标志清零，默认选用摄氏度；接着执行 LJMP MainLoop 进入无限循环，保证系统在通电后能持续运行并准备好后续各项任务。
+
+- 在主循环开头，ReadTemperature 模块负责与 DS18B20 完成单线总线通信：先调用初始化和延时函数产生复位脉冲，然后通过 Skip ROM 和 Convert T 命令启动温度转换；待转换完成后，再次初始化并依次发送 Read Scratchpad 命令，通过字节写入与读出时隙，读取到传感器返回的两字节原始温度数据，存入 32H、33H。
+
+- 键盘扫描模块 ScanKeypad 紧随其后，通过先列后行的矩阵扫描法检测按键状态，包括消抖与按键值识别，若探测到第 0 号键按下，则切换寄存器 41H 中的标志位，实现摄氏度与华氏度的交替显示，同时确保按键释放后不重复触发。
+- ProcessTemperature 模块将传感器的 12 位原始温度值拆分：首先分别提取高字节和低字节的有效位合并成整数部分，再根据低字节低四位乘以 6.25% 得到小数部分；接着对整数和小数各自做除法将其分解为百、十、个位和十分、百分位数字，并在需要时按 °F = °C×9/5 + 32 的公式完成华氏度转换，最终把所有位值存放到不同的寄存器单元。
+
+- 最后，DisplayDigits 模块依靠动态扫描驱动四位共阴极数码管：依次选择数码管位选引脚，将相应位的数字代码从查表区读取并输出到 P0 端口，中间加上小数点显示，并根据单位标志在最后一位显示 “C” 或 “F”，形成“XXX.XX℃/℉”的实时温度读数。
+
+!!! tip "说明"
+	此处出现的华氏度转化是我额外扩展的功能。
+
+- 实现流程图如下。
+```mermaid
+graph TD
+    %% 主程序流程
+    START([程序开始]) --> MAIN[初始化单位标志为摄氏度]
+    MAIN --> MAIN_LOOP[主循环开始]
+    MAIN_LOOP --> READ_TEMP[读取DS18B20温度传感器数据]
+    READ_TEMP --> SCAN_KEY[扫描键盘]
+    SCAN_KEY --> PROCESS_TEMP[处理温度数据为可显示格式]
+    PROCESS_TEMP --> DISPLAY[显示温度到数码管]
+    DISPLAY --> MAIN_LOOP
+
+    %% 读取温度子流程
+    READ_TEMP --> READ_SUB[ReadTemperature子程序]
+    READ_SUB --> START_CONV[启动温度转换]
+    START_CONV --> READ_CMD[发送读取温度命令]
+    READ_CMD --> READ_LOW_BYTE[读取温度数据低字节]
+    READ_LOW_BYTE --> SAVE_LOW[保存低字节到32H]
+    SAVE_LOW --> READ_HIGH_BYTE[读取温度数据高字节]
+    READ_HIGH_BYTE --> SAVE_HIGH[保存高字节到33H]
+    SAVE_HIGH --> READ_RET[返回]
+
+    %% 温度数据处理子流程
+    PROCESS_TEMP --> PROCESS_SUB[ProcessTemperature子程序]
+    PROCESS_SUB --> PROC_HIGH[处理高字节提取有效位]
+    PROC_HIGH --> PROC_LOW[处理低字节合并整数部分]
+    PROC_LOW --> PROC_DECIMAL[处理小数部分]
+    PROC_DECIMAL --> SPLIT_INT[分解整数部分到各位数字]
+    SPLIT_INT --> SPLIT_DEC[分解小数部分到各位数字]
+    SPLIT_DEC --> CHECK_UNIT{需要转换为华氏度?}
+    CHECK_UNIT -- 否 --> PROC_RET[返回]
+    CHECK_UNIT -- 是 --> CONVERT_F[摄氏度转华氏度]
+    CONVERT_F --> SPLIT_F_INT[分解华氏度整数部分]
+    SPLIT_F_INT --> SPLIT_F_DEC[分解华氏度小数部分]
+    SPLIT_F_DEC --> PROC_RET
+
+    %% 显示温度子流程
+    DISPLAY --> DISPLAY_SUB[DisplayDigits子程序]
+    DISPLAY_SUB --> INIT_LOOP[初始化R7=6]
+    INIT_LOOP --> DISP_LOOP[显示循环]
+    DISP_LOOP --> SELECT_POS{选择显示位置}
+    SELECT_POS -- 第6位 --> POS6[显示单位C或F]
+    SELECT_POS -- 第5位 --> POS5[显示小数百分位]
+    SELECT_POS -- 第4位 --> POS4[显示小数十分位]
+    SELECT_POS -- 第3位 --> POS3[显示个位+小数点]
+    SELECT_POS -- 第2位 --> POS2[显示十位]
+    SELECT_POS -- 第1位 --> POS1[显示百位]
+    POS6 --> DISP_DONE
+    POS5 --> DISP_DONE
+    POS4 --> DISP_DONE
+    POS3 --> DISP_DONE
+    POS2 --> DISP_DONE
+    POS1 --> DISP_DONE
+    DISP_DONE[短延时+清空显示] --> CHECK_NEXT{是否还有位要显示?}
+    CHECK_NEXT -- 是 --> DISP_LOOP
+    CHECK_NEXT -- 否 --> DISPLAY_RET[返回]
+
+    %% 键盘扫描子流程
+    SCAN_KEY --> SCAN_SUB[ScanKeypad子程序]
+    SCAN_SUB --> SAVE_REG[保存寄存器]
+    SAVE_REG --> COL_SCAN[列扫描:P1低4位=0FH]
+    COL_SCAN --> COL_CHK{有按键按下?}
+    COL_CHK -- 否 --> SCAN_END[结束扫描]
+    COL_CHK -- 是 --> DEBOUNCE1[消抖处理]
+    DEBOUNCE1 --> COL_CHK2{再次确认有按键?}
+    COL_CHK2 -- 否 --> SCAN_END
+    COL_CHK2 -- 是 --> ID_COL[识别列号]
+    ID_COL --> ROW_SCAN[行扫描:P1高4位=0F0H]
+    ROW_SCAN --> ID_ROW[识别行号并计算按键值]
+    ID_ROW --> CHECK_KEY{是否是0号键?}
+    CHECK_KEY -- 否 --> WAIT_RELEASE[等待按键释放]
+    CHECK_KEY -- 是 --> TOGGLE_UNIT[切换温度单位标志]
+    TOGGLE_UNIT --> WAIT_RELEASE
+    WAIT_RELEASE --> RELEASE_CHK{按键已释放?}
+    RELEASE_CHK -- 否 --> WAIT_RELEASE
+    RELEASE_CHK -- 是 --> DEBOUNCE2[释放消抖]
+    DEBOUNCE2 --> CONFIRM_REL{确认完全释放?}
+    CONFIRM_REL -- 否 --> WAIT_RELEASE
+    CONFIRM_REL -- 是 --> SCAN_END
+    SCAN_END --> RESTORE_REG[恢复寄存器]
+    RESTORE_REG --> SCAN_RET[返回]
+
+    %% DS18B20通信相关子流程 
+    START_CONV --> INIT_DS18B20[初始化DS18B20]
+    INIT_DS18B20 --> SEND_SKIP[发送跳过ROM指令CCH]
+    SEND_SKIP --> SEND_CONV[发送温度转换命令44H]
+    
+    READ_CMD --> INIT_DS18B20_2[初始化DS18B20]
+    INIT_DS18B20_2 --> SEND_SKIP2[发送跳过ROM指令CCH]
+    SEND_SKIP2 --> SEND_READ[发送读取暂存器命令BEH]
+    
+    INIT_DS18B20 --> BUS_LOW[拉低总线]
+    BUS_LOW --> DELAY_600[延时600微秒]
+    DELAY_600 --> BUS_HIGH[释放总线]
+    BUS_HIGH --> DELAY_30[延时30微秒]
+    DELAY_30 --> WAIT_LOW{总线为低?}
+    WAIT_LOW -- 否 --> WAIT_LOW
+    WAIT_LOW -- 是 --> INIT_RET[返回]
+    
+    %% 读写字节子流程简化表示
+    READ_LOW_BYTE --> READ_BYTE_SUB[ReadByteFromDS18B20子程序]
+    READ_HIGH_BYTE --> READ_BYTE_SUB
+    
+    SEND_SKIP --> WRITE_BYTE_SUB[WriteByteToDS18B20子程序]
+    SEND_CONV --> WRITE_BYTE_SUB
+    SEND_SKIP2 --> WRITE_BYTE_SUB
+    SEND_READ --> WRITE_BYTE_SUB
+
+    %% 消抖子程序简化表示
+    DEBOUNCE1 --> DEBOUNCE_SUB[消抖子程序:双重延时循环<br>外循环R6=100<br>内循环R7=99]
+    DEBOUNCE2 --> DEBOUNCE_SUB
+```
+
+
+### 四、代码与结果展示
+
+#### 4.1 实验代码与注释
+- 以下为测温实现和数码管显示的实现代码。
+
+```
+ORG 0000H				; 程序入口点
+	LJMP Main
+; 变量与内存定义
+; 30H - 发送缓冲区
+; 31H - 接收缓冲区
+; 32H - 温度数据低字节
+; 33H - 温度数据高字节
+; 34H - 温度整数部分
+; 35H - 温度小数部分
+; 36H-40H - 分解后的各位数字
+; 41H - 温度单位标志(0=摄氏度，1=华氏度)
+; 42H - 上次按键值记录
+; 46H-50H - 分解后的各位数字（华氏度）
+
+; 主循环，持续检测温度并显示
+Main:
+	; 初始化单位显示标志为摄氏度
+	MOV 41H, #0
+
+MainLoop:
+	LCALL ReadTemperature		; 读取DS18B20温度传感器数据
+	LCALL ScanKeypad			; 扫描键盘
+	LCALL ProcessTemperature	; 处理温度数据为可显示格式
+	LCALL DisplayDigits			; 调用数码管显示函数
+
+	LJMP MainLoop				; 无限循环回到开始
+
+;-------------------------------------------------------------------------------
+; 函数名: ReadTemperature
+; 功能: 读取DS18B20温度数据，低位存储在32H，高位存储在33H
+;-------------------------------------------------------------------------------
+ReadTemperature:
+	LCALL StartTempConversion	; 启动温度转换
+	LCALL ReadTempCommand		; 发送读取温度命令
+
+	LCALL ReadByteFromDS18B20	; 读取温度数据低字节
+	MOV A, 31H					; 将读取的字节存入A
+	MOV 32H, A					; 保存到32H位置
+
+	LCALL ReadByteFromDS18B20	; 读取温度数据高字节
+	MOV A, 31H					; 将读取的字节存入A
+	MOV 33H, A					; 保存到33H位置
+	RET
+
+;-------------------------------------------------------------------------------
+; 函数名: StartTempConversion
+; 功能: 启动DS18B20温度转换
+;-------------------------------------------------------------------------------
+StartTempConversion:
+	LCALL InitializeDS18B20		; 初始化DS18B20
+	LCALL Delay_1ms				; 稳定延时
+
+	; 发送跳过ROM指令(CCH)
+	MOV A, #0CCH				; 将跳过ROM命令代码加载到A（#CCH不可以，一定要#0CCH）
+	MOV 30H, A					; 存储到发送缓冲区
+	LCALL WriteByteToDS18B20	; 发送命令
+
+	; 发送温度转换命令(44H)
+	MOV A, #44H					; 将温度转换命令代码加载到A
+	MOV 30H, A					; 存储到发送缓冲区
+	LCALL WriteByteToDS18B20	; 发送命令
+	RET
+
+;-------------------------------------------------------------------------------
+; 函数名: InitializeDS18B20
+; 功能: 初始化DS18B20温度传感器
+;-------------------------------------------------------------------------------
+InitializeDS18B20:
+	CLR P3.7					; 拉低总线启动通讯
+	LCALL Delay_600us			; 延时700微秒(480-960us)
+	SETB P3.7					; 释放总线
+	LCALL Delay_30us			; 延时等待DS18B20响应(15-60us)
+Wait:
+	JB P3.7, Wait				; 如果总线为高，继续等待
+	RET
+
+;-------------------------------------------------------------------------------
+; 函数名: WriteByteToDS18B20
+; 功能: 向DS18B20写入一个字节的数据(存储在30H)
+;-------------------------------------------------------------------------------
+WriteByteToDS18B20:
+	MOV R0, #8					; 初始化循环计数器，准备写入8位数据
+	MOV A, 30H					; 将要发送的数据加载到累加器A
+
+WriteLoop:
+	CLR C						; 清除进位标志
+	RRC A						; 右移A，将最低位移到进位标志位C
+	CLR P3.7					; 拉低总线，开始写入时序
+	LCALL Delay_5us				; 短延时（15us前）
+	MOV P3.7, C					; 将要写入的位值放到总线上
+	LCALL Delay_70us			; 保持时序的延时（60-120us）
+	SETB P3.7					; 释放总线
+	NOP							; 1us延时等待恢复
+
+	DJNZ R0, WriteLoop			; 循环写入8位数据
+	RET
+
+;-------------------------------------------------------------------------------
+; 函数名: ReadTempCommand
+; 功能: 发送读取温度命令
+;-------------------------------------------------------------------------------
+ReadTempCommand:
+	LCALL InitializeDS18B20		; 初始化DS18B20
+	LCALL Delay_1ms				; 稳定延时
+
+	; 发送跳过ROM指令(CCH)
+	MOV A, #0CCH				; 将跳过ROM命令代码加载到A
+	MOV 30H, A					; 存储到发送缓冲区
+	LCALL WriteByteToDS18B20	; 发送命令
+
+	; 发送读取暂存器命令(BEH)
+	MOV A, #0BEH				; 将读取暂存器命令代码加载到A
+	MOV 30H, A					; 存储到发送缓冲区
+	LCALL WriteByteToDS18B20	; 发送命令
+	RET
+
+;-------------------------------------------------------------------------------
+; 函数名: ReadByteFromDS18B20
+; 功能: 从DS18B20读取一个字节的数据(存储到31H)
+;-------------------------------------------------------------------------------
+ReadByteFromDS18B20:
+	MOV R0, #8					; 初始化循环计数器，准备读取8位数据
+	CLR A						; 清除A寄存器，准备存储读取的数据
+
+ReadLoop:
+	CLR P3.7					; 拉低总线启动读取时序
+	LCALL Delay_5us				; 短延时
+	; 每读出一位前需要拉低总线启动，至少持续1us，之后释放总线（拉高）让DS18B20控制电平
+	SETB P3.7					; 释放总线
+	LCALL Delay_5us				; 短延时（释放电平后、15us前）
+	MOV C, P3.7					; 读取总线状态到进位标志位
+	RRC A						; 右移A，将进位标志位移入A的最高位
+	LCALL Delay_60us			; 延时等待下一位（写入时间至少需要持续60us）
+
+	DJNZ R0, ReadLoop			; 循环读取8位数据
+	MOV 31H, A					; 将读取的字节保存到31H
+	RET
+
+;-------------------------------------------------------------------------------
+; 函数名: ProcessTemperature
+; 功能: 处理温度数据，分解为整数和小数部分
+;       整数部分存储在34H，小数部分存储在35H
+;       同时将各位数字分别存储在36H-40H（摄氏度）和46H-50H（华氏度）
+;-------------------------------------------------------------------------------
+ProcessTemperature:
+	; 处理高字节，提取有效位
+	MOV A, 33H					; 加载高字节
+	ANL A, #07H					; 保留低3位有效数据（2^6、2^5、2^4）
+	SWAP A						; 交换高低四位
+	ANL A, #0F0H				; 清除低四位
+	MOV R0, A					; 暂存到R0
+
+	; 处理低字节高4位，合并整数部分
+	MOV A, 32H					; 加载低字节
+	ANL A, #0F0H				; 提取高四位（2^3 ~ 2^0）
+	SWAP A						; 交换高低四位
+	ORL A, R0					; 合并数据
+	MOV 34H, A					; 保存整数部分到34H
+
+	; 处理小数部分（低字节的低四位）
+	MOV A, 32H					; 加载低字节
+	ANL A, #0FH					; 提取低四位
+	MOV R0, A					; 暂存原始值到R0
+	
+	; 计算小数 = 原始值 * 6.25 (分步计算优化)
+	MOV R6, A					; 保存原始值到R6
+	ADD A, R6					; A = A * 2
+	MOV R5, A					; 保存A * 2在R5
+	ADD A, R5					; A = A * 4
+	MOV R6, A					; 保存A*4到R6
+	ADD A, R5					; A = A * 6
+	MOV R6, A					; 保存A*6到R6
+
+	MOV A, R0 
+	CLR C						; 清除进位标志
+	RRC A						; A = A / 2 
+	CLR C
+	RRC A						; A = A / 4 
+	CLR C
+
+	ADD A, R6					; A = A*6 + A*0.25 = A * 6.25
+	MOV 35H, A					; 保存小数部分到35H
+
+	; 分解整数部分的各位数字
+	MOV A, 34H					; 加载整数部分
+	MOV B, #100					; 准备除以100
+	DIV AB						; A = 商(百位), B = 余数(十位和个位)
+	MOV 36H, A					; 保存百位到36H
+	
+	MOV A, B					; 加载余数(十位和个位)
+	MOV B, #10					; 准备除以10
+	DIV AB						; A = 商(十位), B = 余数(个位)
+	MOV 37H, A					; 保存十位到37H
+	MOV 38H, B					; 保存个位到38H
+
+	; 分解小数部分的各位数字
+	MOV A, 35H					; 加载小数部分
+	MOV B, #10					; 准备除以10
+	DIV AB						; A = 商(十分位), B = 余数(百分位)
+	MOV 39H, A					; 保存十分位到39H
+	MOV 40H, B					; 保存百分位到40H
+
+	; 检查是否需要转换成华氏度
+	MOV A, 41H					; 检查温度单位标志
+	JZ SkipFConversion		    ; 如果是0，则跳过华氏度转换
+
+	; ===== 华氏度转换 =====
+	; 使用公式: °F = °C * 9/5 + 32
+	; 分别处理整数和小数部分，然后加上32
+	
+	; 1. 计算整数部分的华氏度: 整数°C * 9/5
+	MOV A, 34H                  ; 获取摄氏度整数部分
+	MOV B, #9                   
+	MUL AB                      ; 整数°C * 9
+	
+	MOV 53H, C
+
+	MOV R6, A                   ; 保存低字节到R6
+	MOV R7, B                   ; 保存高字节到R7
+	
+	; 除以5 (使用循环减法实现除法)
+	MOV R2, #0                  ; 初始化商为0
+DivideBy5Loop1:
+	CLR C
+	MOV A, R6
+	SUBB A, #5                  ; 减5
+	MOV R6, A
+	MOV A, R7
+	SUBB A, #0                  ; 处理借位
+	MOV R7, A
+	JC DivideBy5End1            ; 如果有借位(结果小于0)，结束除法
+	INC R2                      ; 商加1
+	SJMP DivideBy5Loop1         ; 继续循环
+DivideBy5End1:
+	; 此时R2中存放整数结果，R6中含有余数*5
+	MOV A, R2
+	MOV 51H, A                  ; 临时存储整数部分结果
+	
+	; 2. 计算小数部分的华氏度: 小数°C * 9/5
+	MOV A, 35H                  ; 获取摄氏度小数部分
+	MOV B, #9
+	MUL AB                      ; 小数°C * 9
+	; 结果在A和B中，由于小数部分不会很大，结果不会超过一个字节
+	
+	; 将之前的余数添加到小数部分
+	MOV R6, #5                  ; 重新加载5
+	MOV R5, A                   ; 保存小数*9
+	
+	; 计算余数对应的小数贡献: 余数*2 表示余数/5*10
+	MOV A, #0                   ; 初始化小数部分结果
+	MOV R3, #0                  ; 初始化余数*2
+	
+	; 现在加上整数部分对应的小数贡献
+	CLR C
+	MOV A, R6
+	RLC A                       ; 余数*2 (相当于余数/5*10)
+	MOV R3, A
+	
+	; 合并所有小数部分: (小数*9 + 余数*2)/5
+	ADD A, R5                   ; A = 余数*2 + 小数*9
+	
+	; 除以5 (使用循环减法)
+	MOV R5, A                   ; 保存结果到R5
+	MOV R2, #0                  ; 初始化商为0
+DivideBy5Loop2:
+	CLR C
+	MOV A, R5
+	SUBB A, #5                  ; 减5
+	JC DivideBy5End2            ; 如果有借位，结束除法
+	MOV R5, A
+	INC R2                      ; 商加1
+	SJMP DivideBy5Loop2         ; 继续循环
+DivideBy5End2:
+	; 此时R2中存放小数结果，R5中含有余数
+	MOV A, R2
+	MOV 52H, A                  ; 临时存储小数部分结果
+	
+	; 3. 加上32°F
+	MOV A, 51H                  ; 加载华氏度整数部分
+	ADD A, #32                  ; 加上32
+	
+	MOV C, 53H
+	JNC NoOverflow 
+	ADD A, #20
+
+NoOverflow:
+	MOV 51H, A                  ; 保存回临时变量
+	
+	; 4. 分解华氏度到各个位数字
+	MOV A, 51H                  ; 加载华氏度整数部分
+	MOV B, #100                 ; 准备除以100
+	DIV AB                      ; A = 商(百位), B = 余数(十位和个位)
+	MOV 46H, A                  ; 保存百位到46H
+	
+	MOV A, B                    ; 加载余数(十位和个位)
+	MOV B, #10                  ; 准备除以10
+	DIV AB                      ; A = 商(十位), B = 余数(个位)
+	MOV 47H, A                  ; 保存十位到47H
+	MOV 48H, B                  ; 保存个位到48H
+	
+	; 分解华氏度小数部分的各位数字
+	MOV A, 52H                  ; 加载华氏度小数部分
+	MOV B, #10                  ; 准备除以10
+	DIV AB                      ; A = 商(十分位), B = 余数(百分位)
+	MOV 49H, A                  ; 保存十分位到49H
+	MOV 50H, B                  ; 保存百分位到50H
+
+SkipFConversion:
+	RET
+
+;-------------------------------------------------------------------------------
+; 函数名: DisplayDigits
+; 功能: 将温度数据显示到数码管
+;-------------------------------------------------------------------------------
+DisplayDigits:
+	MOV R7, #6					; 设置显示6个数码管
+
+DisplayLoop:
+	MOV DPTR, #DigitTable		; 指向七段码查找表
+	
+	; 基于R7选择要显示的位和值
+	MOV A, R7
+	CJNE A, #6, D5				; 判断是否为第6位
+	CLR P2.2					; 选择第6位数码管
+	CLR P2.3
+	CLR P2.4
+	
+	; 根据温度单位标志选择显示C或F
+	MOV A, 41H					; 加载温度单位标志
+	JZ DisplayC					; 如果是0，显示C
+	
+	MOV A, #15					; 加载符号"F"
+	SJMP GetCodeAndDisplay
+	
+DisplayC:
+	MOV A, #12					; 加载符号"C"
+
+GetCodeAndDisplay:
+	MOVC A, @A+DPTR				; 查找七段码值
+	MOV P0, A					; 输出到数码管
+	LJMP DigitDisplayed
+
+D5:
+	CJNE A, #5, D4				; 判断是否为第5位
+	SETB P2.2					; 选择第5位数码管
+	CLR P2.3
+	CLR P2.4
+
+	; 检查是否需要转换成华氏度
+	MOV A, 41H					; 检查温度单位标志
+	JNZ F5						; 如果是1，则使用华氏度
+
+	MOV A, 40H					; 加载小数百分位的值
+	SJMP C5
+F5:
+	MOV A, 50H					; 加载小数百分位的值
+C5:
+	MOVC A, @A+DPTR				; 查找七段码值
+	MOV P0, A					; 输出到数码管
+	LJMP DigitDisplayed
+
+D4:
+	CJNE A, #4, D3				; 判断是否为第4位
+	CLR P2.2					; 选择第4位数码管
+	SETB P2.3
+	CLR P2.4
+
+	; 检查是否需要转换成华氏度
+	MOV A, 41H					; 检查温度单位标志
+	JNZ F4						; 如果是1，则使用华氏度
+	
+	MOV A, 39H					; 加载小数十分位的值
+	SJMP C4
+F4:
+	MOV A, 49H					; 加载小数十分位的值
+C4:
+	MOVC A, @A+DPTR				; 查找七段码值
+	MOV P0, A					; 输出到数码管
+	LJMP DigitDisplayed
+
+D3:
+	CJNE A, #3, D2				; 判断是否为第3位
+	SETB P2.2					; 选择第3位数码管
+	SETB P2.3
+	CLR P2.4
+	
+	; 检查是否需要转换成华氏度
+	MOV A, 41H					; 检查温度单位标志
+	JNZ F3						; 如果是1，则使用华氏度
+	
+	MOV A, 38H					; 加载个位的值
+	SJMP C3
+F3:
+	MOV A, 48H					; 加载个位的值
+C3:
+	MOVC A, @A+DPTR				; 查找七段码值
+	MOV P0, A					; 输出到数码管
+	LCALL Delay_100us			; 短延时
+	MOV P0, #0H					; 清空显示
+	MOV A, #80H					; 设置小数点
+	MOV P0, A					; 输出到数码管
+	LJMP DigitDisplayed
+
+D2:
+	CJNE A, #2, D1				; 判断是否为第2位
+	CLR P2.2					; 选择第2位数码管
+	CLR P2.3
+	SETB P2.4
+	
+	; 检查是否需要转换成华氏度
+	MOV A, 41H					; 检查温度单位标志
+	JNZ F2						; 如果是1，则使用华氏度
+	
+	MOV A, 37H					; 加载十位的值
+	SJMP C2
+F2:
+	MOV A, 47H					; 加载十位的值
+C2:
+	MOVC A, @A+DPTR				; 查找七段码值
+	MOV P0, A					; 输出到数码管
+	LJMP DigitDisplayed
+
+D1:
+	CJNE A, #1, DigitDisplayed	; 判断是否为第1位
+	SETB P2.2					; 选择第1位数码管
+	CLR P2.3
+	SETB P2.4
+	
+	; 检查是否需要转换成华氏度
+	MOV A, 41H					; 检查温度单位标志
+	JNZ F1						; 如果是1，则使用华氏度
+	
+	MOV A, 36H					; 加载百位的值
+	SJMP C1
+F1:
+	MOV A, 46H					; 加载百分的值
+C1:
+	JZ D0
+	MOVC A, @A+DPTR				; 查找七段码值
+	MOV P0, A					; 输出到数码管
+	SJMP DigitDisplayed
+
+D0:
+	MOV P0, #0					; 如果首位无数字，不显示
+
+DigitDisplayed:
+	LCALL Delay_100us			; 短延时
+	MOV P0, #0H					; 清空显示以避免余辉效应
+	DJNZ R7, GoLoop				; 显示下一位（短跳转，竟然会接近range?!）
+	RET
+GoLoop:
+	LJMP DisplayLoop			; 没办法，只能LJMP
+
+;-------------------------------------------------------------------------------
+; 函数名: ScanKeypad
+; 功能: 扫描键盘，检测是否有按键按下，并处理摄氏度/华氏度切换
+;       使用第一行第一列的按键（按键值0）作为切换按键
+;-------------------------------------------------------------------------------
+ScanKeypad:
+    ; 保存寄存器
+    PUSH ACC
+    PUSH B
+    PUSH PSW
+    
+    ; 扫描列
+    MOV A, #0FH             	; 低4位设置为高电平(列扫描)
+    MOV P1, A
+    MOV A, P1
+    CPL A                   	; 取反
+    ANL A, #0FH             	; 保留低4位
+    JZ ScanKeypadEnd        	; 无按键按下，退出扫描
+    
+    ; 按键消抖
+    LCALL Debounce
+    
+    ; 再次检查按键状态
+    MOV A, P1
+    CPL A
+    ANL A, #0FH
+    JZ ScanKeypadEnd        	; 如果是抖动，退出扫描
+    
+    ; 确认有按键，识别列号
+    LCALL IdentifyColumn
+    
+    ; 进行行扫描
+    MOV A, #0F0H            	; 高4位设置为高电平(行扫描)
+    MOV P1, A
+    MOV A, P1
+    CPL A                   	; 取反
+    ANL A, #0F0H            	; 保留高4位
+    
+    ; 识别行号并计算按键值
+    LCALL IdentifyRow
+    
+    ; 检查是否是指定切换按键(0号键)
+    MOV A, R0               	; 获取按键值
+    JNZ ScanKeypadWaitRelease  	; 非0号键，等待释放
+    
+    ; 切换温度单位
+    MOV A, 41H
+    CPL A                   	; 切换标志位(0->1 或 1->0)
+    MOV 41H, A
+    
+ScanKeypadWaitRelease:
+    ; 等待按键释放
+    MOV A, #0FH             	; 检查是否有按键仍被按下
+    MOV P1, A
+    MOV A, P1
+    CPL A
+    ANL A, #0FH
+    JNZ ScanKeypadWaitRelease  	; 有按键仍被按下，继续等待
+    
+    ; 释放消抖
+    LCALL Debounce
+    
+    ; 确认完全释放
+    MOV A, #0FH
+    MOV P1, A
+    MOV A, P1
+    CPL A
+    ANL A, #0FH
+    JNZ ScanKeypadWaitRelease  	; 如有按键，继续等待释放
+    
+ScanKeypadEnd:
+    ; 恢复寄存器
+    POP PSW
+    POP B
+    POP ACC
+    RET
+
+;-------------------------------------------------------------------------------
+; 函数名: IdentifyColumn
+; 功能: 识别按下按键的列号
+;-------------------------------------------------------------------------------
+IdentifyColumn:
+    MOV R4, A               	; 保存列状态
+    
+    ; 检查第3列
+    MOV A, R4
+    XRL A, #01H             	; 检查是否是第3列(0001)
+    JZ SET_COL3
+    
+    ; 检查第2列
+    MOV A, R4
+    XRL A, #02H             	; 检查是否是第2列(0010)
+    JZ SET_COL2
+    
+    ; 检查第1列
+    MOV A, R4
+    XRL A, #04H             	; 检查是否是第1列(0100)
+    JZ SET_COL1
+    
+    ; 检查第0列
+    MOV A, R4
+    XRL A, #08H             	; 检查是否是第0列(1000)
+    JZ SET_COL0
+    
+    ; 在多键同时按下时直接返回
+    RET
+
+SET_COL3:
+    MOV R0, #3              	; 列号3
+    RET
+    
+SET_COL2:
+    MOV R0, #2              	; 列号2
+    RET
+    
+SET_COL1:
+    MOV R0, #1              	; 列号1
+    RET
+    
+SET_COL0:
+    MOV R0, #0              	; 列号0
+    RET
+
+;-------------------------------------------------------------------------------
+; 函数名: IdentifyRow
+; 功能: 识别按下按键的行号并计算按键值
+;-------------------------------------------------------------------------------
+IdentifyRow:
+    MOV R5, A               	; 保存行状态
+    
+    ; 检查第3行
+    MOV A, R5
+    XRL A, #10H             	; 检查是否是第3行(0001 0000)
+    JZ SET_ROW3
+    
+    ; 检查第2行
+    MOV A, R5
+    XRL A, #20H             	; 检查是否是第2行(0010 0000)
+    JZ SET_ROW2
+    
+    ; 检查第1行
+    MOV A, R5
+    XRL A, #40H             	; 检查是否是第1行(0100 0000)
+    JZ SET_ROW1
+    
+    ; 检查第0行
+    MOV A, R5
+    XRL A, #80H             	; 检查是否是第0行(1000 0000)
+    JZ SET_ROW0
+    
+    ; 未识别到有效行
+    RET
+    
+SET_ROW3:
+    MOV A, R0
+    ADD A, #12              	; 第3行: 基值+12
+    MOV R0, A
+    RET
+    
+SET_ROW2:
+    MOV A, R0
+    ADD A, #8               	; 第2行: 基值+8
+    MOV R0, A
+    RET
+    
+SET_ROW1:
+    MOV A, R0
+    ADD A, #4               	; 第1行: 基值+4
+    MOV R0, A
+    RET
+    
+SET_ROW0:                   	; 第0行: 保持基值
+    RET
+
+;-------------------------------------------------------------------------------
+; 函数名: Debounce
+; 功能: 按键消抖延时
+;-------------------------------------------------------------------------------
+Debounce:
+    MOV R6, #100
+DbounceLoop:
+    MOV R7, #99
+    DJNZ R7, $              	; 延时循环
+    DJNZ R6, DbounceLoop
+    RET
+
+;-------------------------------------------------------------------------------
+; 延时函数，提供不同时长的延时
+;-------------------------------------------------------------------------------
+; 基础延时（约5微秒）
+Delay_5us:
+	RET
+
+; 10微秒延时
+Delay_10us:
+	MOV R2, #2 
+Delay10usLoop:
+	LCALL Delay_5us
+	DJNZ R2, Delay10usLoop
+	RET
+
+; 15微秒延时
+Delay_15us:
+	MOV R2, #3
+Delay15usLoop:
+	LCALL Delay_5us
+	DJNZ R2, Delay15usLoop
+	RET
+
+; 30微秒延时
+Delay_30us:
+	MOV R3, #2
+Delay30usLoop:
+	LCALL Delay_15us
+	DJNZ R3, Delay30usLoop
+	RET
+
+; 60微秒延时
+Delay_60us:
+	MOV R2, #12
+Delay60usLoop:
+	LCALL Delay_5us
+	DJNZ R2, Delay60usLoop
+	RET
+
+; 70微秒延时
+Delay_70us:
+	MOV R2, #14
+Delay70usLoop:
+	LCALL Delay_5us
+	DJNZ R2, Delay70usLoop
+	RET
+
+; 100微秒延时
+Delay_100us:
+	MOV R2, #20
+Delay100usLoop:
+	LCALL Delay_5us
+	DJNZ R2, Delay100usLoop
+	RET
+
+; 600微秒延时
+Delay_600us:
+    MOV R3, #60
+Delay600usLoop:
+    LCALL Delay_10us
+    DJNZ R3, Delay600usLoop
+    RET
+
+; 1毫秒延时
+Delay_1ms:
+    MOV R3, #10
+Delay1msLoop:
+    LCALL Delay_100us
+    DJNZ R3, Delay1msLoop
+    RET
+
+;-------------------------------------------------------------------------------
+; 七段数码管显示字符查找表
+;-------------------------------------------------------------------------------
+DigitTable:
+    DB 0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07      ; "0"…"7"
+    DB 0x7F, 0x6F, 0x77, 0x7C, 0x39, 0x5E, 0x79, 0x71      ; "8"…"F"
+END
+```
+
+
+#### 4.2 Keil 编译结果显示
+
+- 对程序进行编译，Keil 提示没有产生错误。
+	- ![Figure 5.4.2.1](./_image/5-4.png) {width = "100%""}
+
+#### 4.3 开发板调试图像
+
+- 生成程序，并在开发板上操作。
+	- ![Figure 5.4.3.1](./_image/5-5.jpg) {width = "33%""}
+	
+- 按压输出切换按钮，可以获取换算好的华氏度。
+	- ![Figure 5.4.3.2](./_image/5-6.jpg) {width = "33%""}
+
+- 触摸传感器使其升温，可以发现示数实时改变。
+	- ![Figure 5.4.3.3](./_image/5-7.jpg) {width = "33%""}
+	- ![Figure 5.4.3.2](./_image/5-8.jpg) {width = "33%""}
+
+- 综上，可以认为编程实现了预期的功能。
+
+## L6 10秒倒计时实验（Exam）
+
+!!! success "成功的失败"
+	原本某位老师说最后一个实验测试可以用 C 实现，结果我用 C 实现以后不给予我应得的分数，着实是十分遗憾惋惜。除了测试要求项目，我还加入了用按键对“启动/暂停/继续”的控制，在代码中有体现。
+
+
+```
+/**************************************************************************************
+*		              10秒倒计时实验												  *
+实现现象：按键启动10秒倒计时，数码管显示剩余时间，时间到蜂鸣器发声
+功能：1. 10秒精确倒计时（误差<0.1s）
+      2. 按键控制启动/暂停/继续
+      3. 倒计时结束蜂鸣器发声
+***************************************************************************************/
+
+#include "reg52.h"
+#include <intrins.h>
+
+typedef unsigned int u16;
+typedef unsigned char u8;
+
+// 硬件引脚定义
+sbit beep = P1^5;      // 蜂鸣器
+sbit key = P3^2;       // 按键
+sbit reset_key = P3^3; // 复位按键
+sbit add_key = P3^1;   // 增加时间按键
+sbit LSA = P2^2;       // 数码管位选
+sbit LSB = P2^3;
+sbit LSC = P2^4;
+
+// 全局变量
+u8 code smgduan[17] = {0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,
+                       0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x71}; // 0-F段码
+
+u8 countdown = 10;     // 倒计时秒数
+u8 timer_count = 0;    // 定时器计数
+u8 system_state = 0;   // 系统状态：0-停止，1-运行，2-暂停，3-结束
+u8 key_flag = 0;       // 按键标志
+u8 reset_flag = 0;     // 复位按键标志
+u8 add_flag = 0;       // 增加时间按键标志
+u8 beep_count = 0;     // 蜂鸣器计数
+
+
+void delay(u16 i)
+{
+    while(i--);
+}
+
+
+/* 定时器0初始化，定时50ms */
+void Timer0Init()
+{
+    TMOD |= 0x01;      // 定时器0工作模式1
+    TH0 = 0x3C;        // 50ms定时初值
+    TL0 = 0xB0;
+    ET0 = 1;           // 开定时器0中断
+    EA = 1;            // 开总中断
+    TR0 = 1;           // 启动定时器0
+}
+
+
+/* 数码管显示函数 */
+void DigDisplay()
+{
+    u8 i;
+    u8 display_data[8] = {0};
+    
+    // 准备显示数据
+    if(system_state == 3) // 结束状态显示00
+    {
+        display_data[6] = 0;  // 个位
+        display_data[7] = 0;  // 十位
+    }
+    else
+    {
+        display_data[6] = countdown % 10;  // 个位
+        display_data[7] = countdown / 10;  // 十位
+    }
+    
+    // 扫描显示
+    for(i = 6; i < 8; i++)  // 只显示最右边两位
+    {
+        switch(i)
+        {
+            case(6):
+                LSA=0;LSB=1;LSC=1; break; // 显示第6位(个位)
+            case(7):
+                LSA=1;LSB=1;LSC=1; break; // 显示第7位(十位)
+        }
+        P0 = smgduan[display_data[i]]; // 发送段码
+        delay(200);   // 显示延时
+        P0 = 0x00;    // 消隐
+    }
+}
+
+/* 按键扫描函数 */
+void KeyScan()
+{
+    static u8 key_state = 1;
+    static u8 reset_key_state = 1;
+    static u8 add_key_state = 1;
+    
+    // 扫描控制按键
+    if(key != key_state)  // 按键状态改变
+    {
+        delay(1000);      // 消抖延时
+        if(key == 0 && key_state == 1)  // 按键按下
+        {
+            key_flag = 1;
+        }
+        key_state = key;
+    }
+    
+    // 扫描复位按键
+    if(reset_key != reset_key_state)  // 复位按键状态改变
+    {
+        delay(1000);      // 消抖延时
+        if(reset_key == 0 && reset_key_state == 1)  // 复位按键按下
+        {
+            reset_flag = 1;
+        }
+        reset_key_state = reset_key;
+    }
+    
+    // 扫描增加时间按键
+    if(add_key != add_key_state)  // 增加时间按键状态改变
+    {
+        delay(1000);      // 消抖延时
+        if(add_key == 0 && add_key_state == 1)  // 增加时间按键按下
+        {
+            add_flag = 1;
+        }
+        add_key_state = add_key;
+    }
+}
+
+/* 按键处理函数 */
+void KeyProcess()
+{
+    // 处理复位按键
+    if(reset_flag)
+    {
+        reset_flag = 0;
+        // 复位到初始状态
+        system_state = 0;
+        countdown = 10;
+        timer_count = 0;
+        beep_count = 0;
+        return;  // 复位后直接返回，不处理其他按键
+    }
+    
+    // 处理增加时间按键
+    if(add_flag)
+    {
+        add_flag = 0;
+        // 在当前倒计时基础上增加10秒，最大不超过99秒
+        if(countdown <= 89)  // 防止超过99秒（数码管显示限制）
+        {
+            countdown += 10;
+        }
+        else
+        {
+            countdown = 99;  // 设置为最大值99秒
+        }
+        // 如果系统处于结束状态，增加时间后回到停止状态
+        if(system_state == 3)
+        {
+            system_state = 0;
+            beep_count = 0;
+        }
+    }
+    
+    // 处理控制按键
+    if(key_flag)
+    {
+        key_flag = 0;
+        
+        switch(system_state)
+        {
+            case 0:  // 停止状态 -> 启动
+                system_state = 1;
+                timer_count = 0;
+                break;
+            case 1:  // 运行状态 -> 暂停
+                system_state = 2;
+                break;
+            case 2:  // 暂停状态 -> 继续
+                system_state = 1;
+                break;
+            case 3:  // 结束状态 -> 重新开始
+                system_state = 1;
+                countdown = 10;
+                timer_count = 0;
+                beep_count = 0;
+                break;
+        }
+    }
+}
+
+/* 蜂鸣器控制函数 */
+void BeepControl()
+{
+    if(system_state == 3 && beep_count < 100)  // 结束状态且蜂鸣器未结束
+    {
+        beep = ~beep;       // 蜂鸣器发声
+        beep_count++;
+    }
+    else if(beep_count >= 100)
+    {
+        beep = 1;           // 停止蜂鸣器
+    }
+    else
+    {
+        beep = 1;           // 其他状态不发声
+    }
+}
+
+/*定时器0中断服务函数，每50ms执行一次 */
+void Timer0_ISR() interrupt 1
+{
+    TH0 = 0x3C;        // 重新装载定时初值
+    TL0 = 0xB0;
+    
+    if(system_state == 1)  // 运行状态才计时
+    {
+        timer_count++;
+        if(timer_count >= 20)  // 20*50ms = 1s
+        {
+            timer_count = 0;
+            if(countdown > 0)
+            {
+                countdown--;
+            }
+            if(countdown == 0)
+            {
+                system_state = 3;  // 倒计时结束
+            }
+        }
+    }
+}
+
+
+void main()
+{
+    Timer0Init();    // 初始化定时器
+    beep = 1;        // 初始化蜂鸣器为静音
+    
+    while(1)
+    {
+        KeyScan();       // 按键扫描
+        KeyProcess();    // 按键处理
+        DigDisplay();    // 数码管显示
+        BeepControl();   // 蜂鸣器控制
+    }
+}
+```

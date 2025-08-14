@@ -141,9 +141,13 @@
 
     // 外链新窗口打开
     document.querySelectorAll('a[href^="http"]').forEach(link => {
-      if (!link.hostname.includes(window.location.hostname)) {
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
+      try {
+        if (!link.hostname.includes(window.location.hostname)) {
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+        }
+      } catch (e) {
+        // ignore malformed links
       }
     });
   });
@@ -151,7 +155,8 @@
   console.log("🚀 网站功能已加载完成！");
   console.log("📚 欢迎来到 Samuel 的学习笔记！");
 
-  // === MathJax 配置 ===
+  // ================= MathJax 配置 =================
+  // 请确保在 mkdocs.yml 的 extra_javascript 中把 mathjax 脚本放在本文件之后
   window.MathJax = {
     tex: {
       inlineMath: [["$", "$"], ["\\(", "\\)"]],
@@ -160,21 +165,82 @@
       processEnvironments: true
     },
     options: {
-      ignoreHtmlClass: ".*|",
-      processHtmlClass: "arithmatex"
+      // 跳过 code/pre 等（通常不需要处理）
+      skipHtmlTags: ["script", "noscript", "style", "textarea", "pre"]
     }
   };
 
-  // 渲染 MathJax 公式
+  // 渲染 MathJax 公式（safe wrapper）
   function renderMathJax() {
-    if (window.MathJax && window.MathJax.typesetPromise) {
+    if (window.MathJax && typeof MathJax.typesetPromise === 'function') {
       MathJax.typesetPromise()
-        .then(() => console.log("✅ MathJax 渲染完成"))
-        .catch(err => console.error(err));
+        .then(() => console.debug("MathJax 渲染完成"))
+        .catch(err => console.error("MathJax 渲染错误：", err));
     }
   }
 
-  document.addEventListener('DOMContentLoaded', renderMathJax);
-  document.addEventListener('navigation:end', renderMathJax);
+  // ================= Mermaid 配置 =================
+  function renderMermaid() {
+    if (!window.mermaid) return;
+
+    try {
+      // 初始化（只要调用一次也安全）
+      mermaid.initialize({ startOnLoad: false, theme: 'default' });
+
+      // 把 <pre><code class="language-mermaid">...</code></pre> 替换成 <div class="mermaid">...</div>
+      document.querySelectorAll('code.language-mermaid').forEach((codeBlock) => {
+        const pre = codeBlock.closest('pre');
+        if (!pre) return;
+        const container = document.createElement('div');
+        container.className = 'mermaid';
+        // 使用 textContent 保持原始文本（避免 innerHTML 注入风险）
+        container.textContent = codeBlock.textContent;
+        pre.parentNode.replaceChild(container, pre);
+        // 渲染这个 container
+        try {
+          mermaid.init(undefined, container);
+        } catch (e) {
+          console.warn('Mermaid 渲染单个图时出错：', e);
+        }
+      });
+
+      // 若页面存在多个 .mermaid，初始化全量渲染（兼容老版本 API）
+      try {
+        if (typeof mermaid.run === 'function') mermaid.run();
+        else mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+      } catch (e) {
+        console.debug('mermaid run/init 异常（可忽略）：', e);
+      }
+
+      console.debug("Mermaid 渲染完成");
+    } catch (e) {
+      console.error("Mermaid 渲染错误：", e);
+    }
+  }
+
+  // 绑定初次加载 & instant navigation 切换事件
+  document.addEventListener('DOMContentLoaded', () => {
+    renderMathJax();
+    renderMermaid();
+  });
+
+  // Material 的 instant navigation 事件：页面切换完成
+  if (window.document$ && typeof document$.subscribe === 'function') {
+    document$.subscribe(() => {
+      // 小延迟避免 race condition（DOM 未完全就绪）
+      setTimeout(() => {
+        renderMathJax();
+        renderMermaid();
+      }, 60);
+    });
+  } else {
+    // 兼容 fallback
+    document.addEventListener('navigation:end', () => {
+      setTimeout(() => {
+        renderMathJax();
+        renderMermaid();
+      }, 60);
+    });
+  }
 
 })();
