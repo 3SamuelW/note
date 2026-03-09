@@ -50,12 +50,14 @@ nav:
         - 实验报告: notes/bme/micro-computer/reports.md
     - CS课程 👨‍💻:
       - 缘起: notes/cs/signup.md
+      - 大数据分析与应用:
+        - 课程笔记: notes/cs/MassiveDatasets/notes.md
     - 语言学习 🌏:
       - 阿拉伯语/العربية:
         - 学习笔记: notes/lan/arabic/arabic.md
       - 法语/Français:
         - 学习笔记: notes/lan/french/french.md
-        - 法语语法整理: notes/lan/french/grammaire.md
+        - 法语时态整理: notes/lan/french/grammaire.md
       - 荷兰语/Nederlands:
         - 学习笔记: notes/lan/dutch/dutch.md
     - Samuel学BCI 🧠:
