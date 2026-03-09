@@ -17,25 +17,11 @@
 
 <div class="project-grid">
   <div class="project-card">
-    <h3>📊 项目A - 数据分析工具</h3>
-    <p>使用Python开发的数据可视化工具，支持CSV文件导入和图表生成。</p>
-    <div class="tech-tags">
-      <span class="tag">Python</span>
-      <span class="tag">Pandas</span>
-      <span class="tag">Matplotlib</span>
+    <h3>📊 SenseUs Competition</h3>
+    参与ZJU的TruSense团队制作以肌酐为核心的急性肾衰竭传感器参与荷兰埃因霍温理工大学比赛
     </div>
   </div>
 
-  <div class="project-card">
-    <h3>🌐 项目B - 个人博客系统</h3>
-    <p>基于现代Web技术构建的响应式博客平台，支持Markdown写作。</p>
-    <div class="tech-tags">
-      <span class="tag">HTML/CSS</span>
-      <span class="tag">JavaScript</span>
-      <span class="tag">Git</span>
-    </div>
-  </div>
-</div>
 
 ## 📈 项目统计
 
