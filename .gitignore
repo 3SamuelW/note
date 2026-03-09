@@ -20,7 +20,7 @@ __pycache__/
 /site/
 
 # Local maintenance guide
-/更新指南.md
+/update-notes.md
 
 # Optional: IDE settings
 .vscode/
