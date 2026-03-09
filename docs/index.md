@@ -21,11 +21,10 @@
 
 <div class="home-card">
   <h3>🚀 <a href="projects/">项目展示</a></h3>
-  <p>展示我完成的各种项目，包括：</p>
+  <p>展示我曾参与过的部分项目，包括：</p>
   <ul>
-    <li><a href="projects/project-a/">项目1</a></li>
-    <li><a href="projects/project-b/">项目2</a></li>
-    <li>开源贡献</li>
+    <li><strong><a href="projects/trusense/">SenseUs Competition</a></strong>：参与ZJU的TruSense团队制作以肌酐为核心的急性肾衰竭传感器参与荷兰埃因霍温理工大学比赛</li>
+    <li><strong><a href="index.md">开源贡献</a></strong>：制作此网站用于学术分享和交流，亦可访问<a href="https://github.com/3SamuelW?tab=repositories" target="_blank">Github主页仓库</a></li> 
   </ul>
 </div>
 
