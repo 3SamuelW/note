@@ -78,9 +78,37 @@
     });
   };
 
+  // 首页卡片：点击卡片空白区域也可跳转到主链接
+  const setupHomeCardLinks = () => {
+    document.querySelectorAll('.home-card').forEach((card) => {
+      if (card.dataset.clickReady === 'true') return;
+      card.dataset.clickReady = 'true';
+
+      const mainLink = card.querySelector('h3 a[href]') || card.querySelector('a[href]');
+      if (!mainLink) return;
+
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('role', 'link');
+      card.setAttribute('aria-label', `Open ${mainLink.textContent?.trim() || 'card link'}`);
+
+      card.addEventListener('click', (event) => {
+        if (event.target.closest('a, button, input, textarea, select, label, summary')) return;
+        window.location.href = mainLink.href;
+      });
+
+      card.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          window.location.href = mainLink.href;
+        }
+      });
+    });
+  };
+
   // 页面加载完成后初始化功能
   document.addEventListener('DOMContentLoaded', () => {
     createBackToTopButton();
+    setupHomeCardLinks();
 
     // 代码块复制成功提示
     document.addEventListener('click', (e) => {
@@ -229,6 +257,7 @@
     document$.subscribe(() => {
       // 小延迟避免 race condition（DOM 未完全就绪）
       setTimeout(() => {
+        setupHomeCardLinks();
         renderMathJax();
         renderMermaid();
       }, 60);
@@ -237,6 +266,7 @@
     // 兼容 fallback
     document.addEventListener('navigation:end', () => {
       setTimeout(() => {
+        setupHomeCardLinks();
         renderMathJax();
         renderMermaid();
       }, 60);

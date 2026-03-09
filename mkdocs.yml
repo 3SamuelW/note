@@ -66,8 +66,7 @@ nav:
       - 神经生物学: notes/bci/neurobiology/notes.md
   - 🚀 项目展示:
     - projects/index.md
-    # - 项目A: projects/project-a.md
-    # - 项目B: projects/project-b.md
+    - SenseUs传感器比赛: projects/trusense/TRD_TruSense.pdf
   - 🛠️ 工具资源:
     - tools/index.md
     - 开发工具: tools/development-tools.md
