@@ -18,13 +18,12 @@
   </ul>
 </div>
 
-
 <div class="home-card">
   <h3>🚀 <a href="projects/">项目展示</a></h3>
   <p>展示我曾参与过的部分项目，包括：</p>
   <ul>
-    <li><strong><a href="projects/trusense/">SenseUs Competition</a></strong>：参与ZJU的TruSense团队制作以肌酐为核心的急性肾衰竭传感器参与荷兰埃因霍温理工大学比赛</li>
-    <li><strong><a href="index.md">开源贡献</a></strong>：制作此网站用于学术分享和交流，亦可访问<a href="https://github.com/3SamuelW?tab=repositories" target="_blank">Github主页仓库</a></li> 
+    <li><strong><a href="projects/trusense/TRD_TruSense.pdf" target="_blank">SenseUs Competition</a></strong>：参与ZJU的TruSense团队制作以肌酐为核心的急性肾衰竭传感器参与荷兰埃因霍温理工大学比赛</li>
+    <li><strong><a href="./">开源贡献</a></strong>：制作此网站用于学术分享和交流，亦可访问<a href="https://github.com/3SamuelW?tab=repositories" target="_blank" rel="noopener noreferrer">Github主页仓库</a></li> 
   </ul>
 </div>
 
@@ -52,23 +51,23 @@
 ## 📊 学习目标
 
 !!! success "2025 年学习计划"
-    - 深入学习 Python 编程，包括数据科学、人工智能和 Web 开发
-    - 对脑科学和脑机有更深入的了解和研究
-    - 完成至少 3 个实际项目
-    - 继续贡献开源项目
+- 深入学习 Python 编程，包括数据科学、人工智能和 Web 开发
+- 对脑科学和脑机有更深入的了解和研究
+- 完成至少 3 个实际项目
+- 继续贡献开源项目
 
 ---
 
 > 💡 **提示**: 使用左侧导航栏浏览不同分类的内容，或使用搜索功能快速找到你需要的信息！
 
 !!! quote "Je crois que"
- 	千里之行，始于足下
+千里之行，始于足下
 
 ---
 
 > 🚀
-**欢迎来到我的学习世界！**
-**Welcome to my learning journey!**
-**Bienvenue dans mon univers d’apprentissage !**
-**مرحبًا بكم في عالمي الدراسي!**
-**Welkom in mijn leerwereld!**
+> **欢迎来到我的学习世界！**
+> **Welcome to my learning journey!**
+> **Bienvenue dans mon univers d’apprentissage !**
+> **مرحبًا بكم في عالمي الدراسي!**
+> **Welkom in mijn leerwereld!**
