@@ -49,7 +49,7 @@ nav:
         - 摘要: notes/bme/micro-computer/index.md
         - 实验报告: notes/bme/micro-computer/reports.md
       - 模式识别与机器学习:
-        - 课程笔记：notes/bme/machine-learning/mode-recog-machine-learning.md
+        - 课程笔记: notes/bme/machine-learning/mode-recog-machine-learning.md
     - CS课程 👨‍💻:
       - 缘起: notes/cs/signup.md
       - 大数据分析与应用:
