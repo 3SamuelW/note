@@ -186,7 +186,13 @@
   // ================= MathJax 配置 =================
   // 请确保在 mkdocs.yml 的 extra_javascript 中把 mathjax 脚本放在本文件之后
   window.MathJax = {
+    loader: {
+      load: ['[tex]/boldsymbol']
+    },
     tex: {
+      packages: {
+        '[+]': ['boldsymbol']
+      },
       inlineMath: [["$", "$"], ["\\(", "\\)"]],
       displayMath: [["$$", "$$"], ["\\[", "\\]"]],
       processEscapes: true,
@@ -194,7 +200,10 @@
     },
     options: {
       // 跳过 code/pre 等（通常不需要处理）
-      skipHtmlTags: ["script", "noscript", "style", "textarea", "pre"]
+      skipHtmlTags: ["script", "noscript", "style", "textarea", "pre"],
+      // 与 arithmatex(generic: true) 配套，仅处理 arithmatex 包裹的内容
+      ignoreHtmlClass: ".*|",
+      processHtmlClass: "arithmatex"
     }
   };
 
@@ -205,6 +214,19 @@
         .then(() => console.debug("MathJax 渲染完成"))
         .catch(err => console.error("MathJax 渲染错误：", err));
     }
+  }
+
+  // 兼容脚本延迟加载：重试几次，确保 MathJax 可用后触发渲染
+  function renderMathJaxWithRetry(retries = 10, delayMs = 300) {
+    if (window.MathJax && typeof MathJax.typesetPromise === 'function') {
+      renderMathJax();
+      return;
+    }
+    if (retries <= 0) {
+      console.warn("MathJax 未就绪，跳过本次渲染");
+      return;
+    }
+    setTimeout(() => renderMathJaxWithRetry(retries - 1, delayMs), delayMs);
   }
 
   // ================= Mermaid 配置 =================
@@ -246,10 +268,23 @@
     }
   }
 
-  // 绑定初次加载 & instant navigation 切换事件
+  // 绑定初次加载
   document.addEventListener('DOMContentLoaded', () => {
-    renderMathJax();
+    renderMathJaxWithRetry();
     renderMermaid();
+  });
+
+  // 兼容 Material 的 instant navigation（页面切换后重新渲染公式/流程图）
+  if (window.document$ && typeof window.document$.subscribe === 'function') {
+    window.document$.subscribe(() => {
+      renderMathJaxWithRetry();
+      renderMermaid();
+    });
+  }
+
+  // 兜底：窗口资源加载完成后再触发一次
+  window.addEventListener('load', () => {
+    renderMathJaxWithRetry();
   });
 
   // Material 的 instant navigation 事件：页面切换完成
