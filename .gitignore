@@ -19,8 +19,8 @@ __pycache__/
 /build/
 /site/
 
-# Local maintenance guide
-/update-notes.md
+# Temporary scripts, tools and local docs
+/temp/
 
 # Optional: IDE settings
 .vscode/
